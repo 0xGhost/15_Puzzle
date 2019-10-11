@@ -5,6 +5,7 @@
 #include <iostream>
 #include <limits>
 #include <stdlib.h>
+#include <sstream>
 
 using std::cin;
 using std::cout;
@@ -29,6 +30,10 @@ int main()
 	auto input_number = [](int& input) -> bool
 	{
 		int inputNumber;
+
+		std::istringstream iss("2 \n");
+		cin.rdbuf(iss.rdbuf());
+
 		cin >> inputNumber;
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -64,12 +69,14 @@ int main()
 			switch (option)
 			{
 			case 1:
-				cout << "enter 15 integers: ";
-				int counter = 15;
-				while (counter >= 0)
 				{
-					//if(input_number())
+					cout << "enter 15 integers: ";
+					int counter = 15;
+					while (counter >= 0)
+					{
+						//if(input_number())
 						counter--;
+					}
 				}
 
 				break;
@@ -81,13 +88,10 @@ int main()
 				cout << endl;
 				break;
 			case 3:
-				cout << "enter an integer: ";
-				cin >> inputNumber;
-
-
+				// TODO: output file
 				break;
 			case 4:
-				flag = false;
+				// TODO: read calculate and write
 				break;
 			default:
 				break;
