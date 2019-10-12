@@ -3,6 +3,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "..//15_Puzzle/Board.h"
+#include "..//15_Puzzle/Board.cpp"
 
 #include <sstream>
 #include <iostream>
@@ -15,7 +16,7 @@ using namespace std;
 
 namespace UnitTest
 {
-	TEST_CLASS(UnitTest)
+	TEST_CLASS(BoardUnitTest)
 	{
 	public:
 		/*
