@@ -6,6 +6,7 @@
 #include <limits>
 #include <stdlib.h>
 
+#include "Board.h"
 
 using std::cin;
 using std::cout;
@@ -30,6 +31,24 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 #endif
+
+	{
+		int before[] = { 1, 2, 3, 4,
+		5, 6, 7, 8,
+		9, 10, -1, 12,
+		13, 14, 15, 20 };
+
+		int afterBottom[] =
+		{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			9, 10, 15, 12,
+			13, 14, -1, 20 };
+		Board board0(4, before);
+		Board board1(4, afterBottom);
+		cout << board0 << endl;
+		board0.Move(Direction::Bottom);
+		bool a = board0.isEqualTo(board1);
+	}
 
 	auto input_number = [](int& input) -> bool
 	{
