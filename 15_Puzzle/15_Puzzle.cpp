@@ -33,7 +33,8 @@ int main()
 #endif
 
 	{
-		int before[] = { 1, 2, 3, 4,
+		int before[] = 
+		{ 1, 2, 3, 4,
 		5, 6, 7, 8,
 		9, 10, -1, 12,
 		13, 14, 15, 20 };
@@ -46,7 +47,10 @@ int main()
 		Board board0(4, before);
 		Board board1(4, afterBottom);
 		cout << board0 << endl;
+		cout << board1 << endl;
 		board0.Move(Direction::Bottom);
+		cout << board0 << endl;
+		cout << board1 << endl;
 		bool a = board0.isEqualTo(board1);
 	}
 

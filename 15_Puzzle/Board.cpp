@@ -44,9 +44,13 @@ Board::~Board()
 
 void Board::Move(const Direction& direction)
 {
-
 	int postionX = ((direction & 1) ? spaceX + direction : spaceX);
 	int postionY = ((direction & 1) ? spaceY : spaceY + (direction >> 1));
+	/* 
+	//TODO: check if the code above is quicker then behand
+	int postionX1 = ((direction % 2) ? spaceX + direction : spaceX);
+	int postionY1 = ((direction % 2) ? spaceY : spaceY + (direction / 2));
+	*/
 	blocks[IndexOf(spaceX, spaceY)] = blocks[IndexOf(postionX,postionY)];
 	blocks[IndexOf(postionX, postionY)] = SPACE;
 }
@@ -75,7 +79,7 @@ std::ostream& Board::print(std::ostream& ostr, const Comparable& comparable)
 	{
 		for (int j = 0; j < SIZE; j++)
 		{
-			ostr << std::setw((long long)numberMaxLength + 1) << (i == j == SIZE ? ' ' : ((Board*)& comparable)->blocks[IndexOf(i, j)]);
+			ostr << std::setw((long long)numberMaxLength + 1) << (i == j == SIZE ? ' ' : ((Board*)& comparable)->blocks[IndexOf(j, i)]);
 		}
 		ostr << std::endl;
 	}
