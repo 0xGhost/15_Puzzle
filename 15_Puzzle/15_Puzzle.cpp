@@ -5,7 +5,7 @@
 #include <iostream>
 #include <limits>
 #include <stdlib.h>
-#include <sstream>
+
 
 using std::cin;
 using std::cout;
@@ -17,22 +17,25 @@ using std::string;
 #define MEMORY_LEAK_CHECK true
 
 #if MEMORY_LEAK_CHECK
-
 	#define _CRTDBG_MAP_ALLOC
 	#include <crtdbg.h>
-
 #endif
 
 
 
 int main()
 {
+
+#if MEMORY_LEAK_CHECK
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
+#endif
+
 	auto input_number = [](int& input) -> bool
 	{
 		int inputNumber;
 
-		std::istringstream iss("2 \n");
-		cin.rdbuf(iss.rdbuf());
+
 
 		cin >> inputNumber;
 		cin.clear();
@@ -101,5 +104,10 @@ int main()
 
 	} while (flag);
 
+#if MEMORY_LEAK_CHECK
+	_CrtDumpMemoryLeaks();
+#endif
+
+	return 0;
 }
 
