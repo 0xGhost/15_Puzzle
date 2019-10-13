@@ -30,11 +30,14 @@ namespace UnitTest
 		TEST_METHOD(CheckContinuousNumberEqual)
 		{
 			ContinuousNumber c1,c2;
-			ContinuousNumber* c3 = new ContinuousNumber();
 			Assert::IsTrue(c1 == c2);
-			Assert::IsTrue(c1 == *c3);
+		}
 
-			delete c3;
+		TEST_METHOD(CheckContinuousNumberNotEqual)
+		{
+			ContinuousNumber c1, c2;
+			c2.row = 1;
+			Assert::IsFalse(c1 == c2);
 		}
 
 		TEST_METHOD(CheckRowContinuous)
