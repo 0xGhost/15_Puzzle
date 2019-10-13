@@ -21,7 +21,7 @@
     <ClCompile Include="Board.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TurnBoard.cpp">
+    <ClCompile Include="NCLBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClInclude Include="Comparable.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="TurnBoard.h">
+    <ClInclude Include="NCLBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

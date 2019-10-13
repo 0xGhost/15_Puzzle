@@ -153,12 +153,12 @@
   <ItemGroup>
     <ClCompile Include="15_Puzzle.cpp" />
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="TurnBoard.cpp" />
+    <ClCompile Include="NCLBoard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Comparable.h" />
-    <ClInclude Include="TurnBoard.h" />
+    <ClInclude Include="NCLBoard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

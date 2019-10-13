@@ -6,7 +6,7 @@
 #include <limits>
 #include <stdlib.h>
 
-#include "Board.h"
+#include "NCLBoard.h"
 
 using std::cin;
 using std::cout;
@@ -52,13 +52,27 @@ int main()
 		cout << board0 << endl;
 		cout << board1 << endl;
 		bool a = board0.isEqualTo(board1);
-	}
+
+		int data[16] =
+		{ 1, 2, 3, 4,
+		5, 6, 7, 8,
+		9, 10, 17, 12,
+		13, 14, 15, -1 };
+
+		NCLBoard board3(4, data);
+		ContinuousNumber* c = board3.CheckContinuous();
+		cout << c->row << endl;
+		cout << c->rowReverse << endl;
+		cout << c->column << endl;
+		cout << c->columnReverse << endl;
+		
+		delete c;
+		
+	}_CrtDumpMemoryLeaks();
 
 	auto input_number = [](int& input) -> bool
 	{
 		int inputNumber;
-
-
 
 		cin >> inputNumber;
 		cin.clear();
