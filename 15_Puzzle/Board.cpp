@@ -1,3 +1,5 @@
+// author: Yiang Lu
+// Date created: 10/Oct/2019
 #include "Board.h"
 #include <iomanip>
 
@@ -42,17 +44,22 @@ Board::~Board()
 	blocks = nullptr;
 }
 
-void Board::Move(const Direction& direction)
+bool Board::Move(const Direction& direction)
 {
-	int postionX = ((direction & 1) ? spaceX + direction : spaceX);
-	int postionY = ((direction & 1) ? spaceY : spaceY + (direction >> 1));
+	// get the space position after the move
+	int positionX = ((direction & 1) ? spaceX + direction : spaceX);
+	int positionY = ((direction & 1) ? spaceY : spaceY + (direction >> 1));
+	// check if the move is valid
+	if (positionX < 0 || positionX >= SIZE || positionY < 0 || positionY >= SIZE)
+		return false;
 	/* 
 	//TODO: check if the code above is quicker then behand
 	int postionX1 = ((direction % 2) ? spaceX + direction : spaceX);
 	int postionY1 = ((direction % 2) ? spaceY : spaceY + (direction / 2));
 	*/
-	blocks[IndexOf(spaceX, spaceY)] = blocks[IndexOf(postionX,postionY)];
-	blocks[IndexOf(postionX, postionY)] = SPACE;
+	blocks[IndexOf(spaceX, spaceY)] = blocks[IndexOf(positionX,positionY)];
+	blocks[IndexOf(positionX, positionY)] = SPACE;
+	return true;
 }
 
 bool Board::isEqualTo(const Comparable& rhs)
