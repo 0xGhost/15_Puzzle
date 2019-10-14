@@ -1,6 +1,28 @@
 // author: Yiang Lu
 // Date created: 13/Oct/2019
 #include "NCLBoard.h"
+#include <stdexcept>
+
+using std::invalid_argument;
+
+NCLBoard::NCLBoard(const int& size, int* input) throw (invalid_argument) : Board(size, input)
+{
+	bool* bucket = new bool[max + 1];
+	memset(bucket, false, (max + 1) * sizeof(bool));
+	for (int i = 0; i < SIZE * SIZE; i++)
+	{
+		if (input[i] == -1) continue;
+		else
+		{
+			if (bucket[input[i]])
+				throw invalid_argument("Duplicate number detected: " + input[i]);
+			else
+				bucket[input[i]] = true;
+		}
+	}
+	// TODO: throw exception if same number appear in the input array
+	// use a binary search tree, may not? bucket may better
+}
 
 bool NCLBoard::IsTurnEnd()
 {

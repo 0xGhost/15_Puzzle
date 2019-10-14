@@ -1,7 +1,12 @@
 // author: Yiang Lu
 // Date created: 10/Oct/2019
 #include "Board.h"
+#include <deque>
+#include <stdexcept>
 #include <iomanip>
+
+using std::deque;
+using std::invalid_argument;
 
 inline int GetNumberLength(int number)
 {
@@ -14,23 +19,28 @@ inline int GetNumberLength(int number)
 	return length;
 }
 
-Board::Board(const int& size = 4, const int& min = 1, const int& max = 20) : SIZE(size), spaceX(size), spaceY(size)
+Board::Board(const int& size = 4, const int& min = 1, const int& max = 20) throw (invalid_argument) : SIZE(size), spaceX(size), spaceY(size), max(max)
 {
+	if ((max - min) < (size * size))
+		throw invalid_argument("Random range is smaller than numbers of blocks");
 	numberMaxLength = GetNumberLength(max);
 	blocks = RandomGenerator(min, max);
 }
 
-Board::Board(const int& size, int* input) : SIZE(size), spaceX(size), spaceY(size)
+Board::Board(const int& size, int* input) throw (invalid_argument) : SIZE(size), spaceX(size), spaceY(size), max(-1)
 {
 	blocks = new int[SIZE * SIZE];
 	memcpy(blocks, input, SIZE * SIZE * sizeof(int));
-
-	int max = -1;
+	bool spaceFlag = false;
 	for (int i = 0; i < SIZE * SIZE; i++)
 	{
 		max = input[i] > max ? input[i] : max;
 		if (input[i] == -1)
 		{
+			if (!spaceFlag)
+				spaceFlag = true;
+			else
+				throw invalid_argument("More than one space block");
 			spaceX = i % SIZE;
 			spaceY = i / SIZE;
 		}
@@ -52,7 +62,7 @@ bool Board::Move(const Direction& direction)
 	// check if the move is valid
 	if (positionX < 0 || positionX >= SIZE || positionY < 0 || positionY >= SIZE)
 		return false;
-	/* 
+	/*
 	//TODO: check if the code above is quicker then behand
 	int postionX1 = ((direction % 2) ? spaceX + direction : spaceX);
 	int postionY1 = ((direction % 2) ? spaceY : spaceY + (direction / 2));
@@ -70,8 +80,36 @@ bool Board::isEqualTo(const Comparable& rhs)
 
 int* Board::RandomGenerator(const int& min, const int& max)
 {
-	int* a = new int[SIZE];
-	return a;
+	int size = SIZE * SIZE;
+	deque<int>* bucket = new deque<int>[size];
+	int* array = new int[size];
+
+	for (int number = 0; number < size - 1; number++)
+	{
+		int b_index = (rand() % (max - min)) + min;
+		if (rand() & 1)
+		{
+			bucket[b_index].push_back(number);
+		}
+		else
+		{
+			bucket[b_index].push_front(number);
+		}
+	}
+	int index = 0;
+	for (int i = 0; i < size; i++)
+	{
+		for (const int& number : bucket[i])
+		{
+			array[index++] = number;
+		}
+	}
+	array[size - 1] = -1;
+
+	delete[] bucket;
+	bucket = nullptr;
+
+	return array;
 }
 
 int Board::IndexOf(const int& x, const int& y)

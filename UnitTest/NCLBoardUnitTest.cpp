@@ -27,6 +27,33 @@ namespace UnitTest
 
 		}
 		*/
+
+		TEST_METHOD(TestConstructorExecption1)
+		{
+			int data[] =
+			{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			9, 10, 17, 12,
+			13, 12, 15, -1 };
+
+			
+			auto func = [&] { NCLBoard board1(4, data); };
+			Assert::ExpectException<invalid_argument>(func);
+		}
+
+		TEST_METHOD(TestConstructorExecption2)
+		{
+			int data[] =
+			{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			9, 10, 17, 12,
+			13, -1, 15, -1 };
+
+
+			auto func = [&] { NCLBoard board1(4, data); };
+			Assert::ExpectException<invalid_argument>(func);
+		}
+
 		TEST_METHOD(CheckContinuousNumberEqual)
 		{
 			ContinuousNumber c1,c2;
@@ -153,6 +180,26 @@ namespace UnitTest
 			ContinuousNumber result1;
 			result1.column = 0;
 			result1.row = 3;
+			result1.columnReverse = 0;
+			result1.rowReverse = 1;
+			Assert::IsTrue(*result0 == result1);
+			delete result0;
+			result0 = nullptr;
+		}
+
+		TEST_METHOD(CheckMixedContinuous3)
+		{
+			int data[16] =
+			{ 4, 20, 19, 13,
+			5, 6, 7, 14,
+			18, 17, 16, 15,
+			1, 2, 3, -1 };
+
+			NCLBoard board1(4, data);
+			ContinuousNumber* result0 = board1.CheckContinuous();
+			ContinuousNumber result1;
+			result1.column = 1;
+			result1.row = 1;
 			result1.columnReverse = 0;
 			result1.rowReverse = 1;
 			Assert::IsTrue(*result0 == result1);

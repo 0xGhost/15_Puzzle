@@ -152,10 +152,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="15_Puzzle.cpp" />
+    <ClCompile Include="BinarySearchTree.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="NCLBoard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Comparable.h" />
     <ClInclude Include="NCLBoard.h" />

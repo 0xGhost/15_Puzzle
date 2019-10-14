@@ -5,6 +5,7 @@
 #include <iostream>
 #include <limits>
 #include <stdlib.h>
+#include <ctime>
 
 #include "NCLBoard.h"
 
@@ -26,7 +27,7 @@ using std::string;
 
 int main()
 {
-
+	srand((unsigned)time(0));
 #if MEMORY_LEAK_CHECK
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
@@ -67,6 +68,9 @@ int main()
 		cout << c->columnReverse << endl;
 		
 		delete c;
+
+		NCLBoard board4(4, 1, 20);
+		cout << board4 << endl;
 		
 	}_CrtDumpMemoryLeaks();
 

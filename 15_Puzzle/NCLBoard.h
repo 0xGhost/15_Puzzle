@@ -9,7 +9,7 @@ struct ContinuousNumber
 	int row = 0;
 	int columnReverse = 0;
 	int rowReverse = 0;
-	bool operator==(const ContinuousNumber& rhs) const
+	inline bool operator==(const ContinuousNumber& rhs) const
 	{
 		return column == rhs.column
 			&& row == rhs.row
@@ -23,8 +23,8 @@ class NCLBoard :
 	public Board
 {
 public:
-	NCLBoard(const int& size, const int& min, const int& max) :Board(size, min, max) {};
-	NCLBoard(const int& size, int* input) :Board(size, input) {};
+	NCLBoard(const int& size, const int& min, const int& max) :Board(size, min, max) {}
+	NCLBoard(const int& size, int* input);
 	//~NCLBoard();
 	bool IsTurnEnd(); // check if this board is a turn end 
 	ContinuousNumber* CheckContinuous(); // check full continuous in all directions
