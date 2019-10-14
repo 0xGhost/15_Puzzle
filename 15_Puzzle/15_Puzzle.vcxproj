@@ -155,12 +155,14 @@
     <ClCompile Include="BinarySearchTree.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="NCLBoard.cpp" />
+    <ClCompile Include="NCLBoardTraverser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Comparable.h" />
     <ClInclude Include="NCLBoard.h" />
+    <ClInclude Include="NCLBoardTraverser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

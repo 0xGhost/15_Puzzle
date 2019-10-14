@@ -39,6 +39,18 @@ namespace UnitTest
 			Assert::AreEqual(3, GetNumberLength(123));
 		}
 
+		TEST_METHOD(TestConstructorException)
+		{
+			auto func = [this] { Board board(4, -3, 2); };
+			Assert::ExpectException<invalid_argument>(func);
+		}
+
+		TEST_METHOD(TestConstructorException0)
+		{
+			auto func = [this] { Board board(4, 0, 2); };
+			Assert::ExpectException<invalid_argument>(func);
+		}
+
 		TEST_METHOD(TestConstructorException1)
 		{
 			auto func = [this] { Board board(4, 1, 2); };

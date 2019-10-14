@@ -85,12 +85,14 @@ bool Board::isEqualTo(const Comparable& rhs)
 int* Board::RandomGenerator(const int& min, const int& max)
 {
 	int size = SIZE * SIZE;
-	deque<int>* bucket = new deque<int>[max - min + 1];
+	int range = (max - min + 1);
+	deque<int>* bucket = new deque<int>[range];
 	int* array = new int[size];
 
-	for (int number = 0; number < size - 1; number++)
+
+	for (int number = min; number <= max; number++)
 	{
-		int b_index = (rand() % (max - min)) + min;
+		int b_index = rand() % range;
 		if (rand() & 1)
 		{
 			bucket[b_index].push_back(number);
@@ -101,19 +103,26 @@ int* Board::RandomGenerator(const int& min, const int& max)
 		}
 	}
 	int index = 0;
-	for (int i = 0; i < (max - min + 1); i++)
+	for (int i = 0; i < range; i++)
 	{
 		for (const int& number : bucket[i])
 		{
 			array[index++] = number;
+			if (index >= size)
+			{
+				delete[] bucket;
+				bucket = nullptr;
+				array[size - 1] = -1;
+				return array;
+			}
 		}
 	}
-	array[size - 1] = -1;
-
+	// defensive code
 	delete[] bucket;
 	bucket = nullptr;
-
+	array[size - 1] = -1;
 	return array;
+	
 }
 
 int Board::IndexOf(const int& x, const int& y)

@@ -34,6 +34,7 @@ int main()
 #endif
 
 	{
+		/*
 		int before[] = 
 		{ 1, 2, 3, 4,
 		5, 6, 7, 8,
@@ -68,11 +69,20 @@ int main()
 		cout << c->columnReverse << endl;
 		
 		delete c;
+		*/
 
-		NCLBoard board4(4, 1, 15);
+		int blocks[] =
+		{ 1, 2, 3, 4,
+		5, 6, 7, 8,
+		9, 10, 11, 12,
+		13, 14, 15, -1 };
+
+		NCLBoard board4(4, blocks);
 		cout << board4 << endl;
 		
 	}_CrtDumpMemoryLeaks();
+
+	return 0;
 
 	auto input_number = [](int& input) -> bool
 	{
