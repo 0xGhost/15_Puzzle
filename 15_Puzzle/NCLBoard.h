@@ -23,7 +23,7 @@ class NCLBoard :
 	public Board
 {
 public:
-	NCLBoard(const int& size, const int& min, const int& max) :Board(size, min, max) {}
+	NCLBoard(const int& size, const int& min, const int& max) throw (std::invalid_argument) :Board(size, min, max) {}
 	NCLBoard(const int& size, int* input);
 	//~NCLBoard();
 	bool IsTurnEnd(); // check if this board is a turn end 

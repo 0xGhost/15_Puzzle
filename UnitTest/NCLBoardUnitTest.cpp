@@ -27,8 +27,23 @@ namespace UnitTest
 
 		}
 		*/
+		TEST_METHOD(TestConstructorNoException1)
+		{
+			NCLBoard board1(4, 1, 15);
+		}
 
-		TEST_METHOD(TestConstructorExecption1)
+		TEST_METHOD(TestConstructorNoException2)
+		{
+			NCLBoard board1(4, 3, 30);
+		}
+
+		TEST_METHOD(TestConstructorException0)
+		{
+			auto func = [&] { NCLBoard board1(4, 1, 2); };
+			Assert::ExpectException<invalid_argument>(func);
+		}
+
+		TEST_METHOD(TestConstructorException1)
 		{
 			int data[] =
 			{ 1, 2, 3, 4,
@@ -41,7 +56,7 @@ namespace UnitTest
 			Assert::ExpectException<invalid_argument>(func);
 		}
 
-		TEST_METHOD(TestConstructorExecption2)
+		TEST_METHOD(TestConstructorException2)
 		{
 			int data[] =
 			{ 1, 2, 3, 4,

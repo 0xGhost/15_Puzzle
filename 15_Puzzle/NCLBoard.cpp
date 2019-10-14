@@ -15,7 +15,7 @@ NCLBoard::NCLBoard(const int& size, int* input) throw (invalid_argument) : Board
 		else
 		{
 			if (bucket[input[i]])
-				throw invalid_argument("Duplicate number detected: " + input[i]);
+				throw invalid_argument("duplicate number detected: " + input[i]);
 			else
 				bucket[input[i]] = true;
 		}

@@ -21,8 +21,10 @@ inline int GetNumberLength(int number)
 
 Board::Board(const int& size = 4, const int& min = 1, const int& max = 20) throw (invalid_argument) : SIZE(size), spaceX(size), spaceY(size), max(max)
 {
-	if ((max - min) < (size * size))
-		throw invalid_argument("Random range is smaller than numbers of blocks");
+	if ((max - min + 1) < (size * size - 1))
+		throw invalid_argument("random range is smaller than numbers of blocks");
+	if(min <= 0)
+		throw invalid_argument("argument min must be positive integer");
 	numberMaxLength = GetNumberLength(max);
 	blocks = RandomGenerator(min, max);
 }
@@ -35,12 +37,14 @@ Board::Board(const int& size, int* input) throw (invalid_argument) : SIZE(size),
 	for (int i = 0; i < SIZE * SIZE; i++)
 	{
 		max = input[i] > max ? input[i] : max;
+		if(input[i] <= 0 && input[i] != -1)
+			throw invalid_argument("value of non-space blocks must be positive integer");
 		if (input[i] == -1)
 		{
 			if (!spaceFlag)
 				spaceFlag = true;
 			else
-				throw invalid_argument("More than one space block");
+				throw invalid_argument("more than one space block");
 			spaceX = i % SIZE;
 			spaceY = i / SIZE;
 		}
@@ -81,7 +85,7 @@ bool Board::isEqualTo(const Comparable& rhs)
 int* Board::RandomGenerator(const int& min, const int& max)
 {
 	int size = SIZE * SIZE;
-	deque<int>* bucket = new deque<int>[size];
+	deque<int>* bucket = new deque<int>[max - min + 1];
 	int* array = new int[size];
 
 	for (int number = 0; number < size - 1; number++)
@@ -97,7 +101,7 @@ int* Board::RandomGenerator(const int& min, const int& max)
 		}
 	}
 	int index = 0;
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < (max - min + 1); i++)
 	{
 		for (const int& number : bucket[i])
 		{

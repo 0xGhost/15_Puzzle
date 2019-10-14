@@ -69,7 +69,7 @@ int main()
 		
 		delete c;
 
-		NCLBoard board4(4, 1, 20);
+		NCLBoard board4(4, 1, 15);
 		cout << board4 << endl;
 		
 	}_CrtDumpMemoryLeaks();
@@ -151,4 +151,3 @@ int main()
 
 	return 0;
 }
-
