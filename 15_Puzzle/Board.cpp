@@ -2,7 +2,7 @@
 // Date created: 10/Oct/2019
 #include "Board.h"
 #include <deque>
-#include <stdexcept>
+
 #include <iomanip>
 
 using std::deque;
@@ -19,7 +19,8 @@ inline int GetNumberLength(int number)
 	return length;
 }
 
-Board::Board(const int& size = 4, const int& min = 1, const int& max = 20) throw (invalid_argument) : SIZE(size), spaceX(size), spaceY(size), max(max)
+Board::Board(const int& size = 4, const int& min = 1, const int& max = 20) throw (invalid_argument) 
+	: SIZE(size), spaceX(size), spaceY(size), max(max)
 {
 	if ((max - min + 1) < (size * size - 1))
 		throw invalid_argument("random range is smaller than numbers of blocks");
@@ -29,7 +30,8 @@ Board::Board(const int& size = 4, const int& min = 1, const int& max = 20) throw
 	blocks = RandomGenerator(min, max);
 }
 
-Board::Board(const int& size, int* input) throw (invalid_argument) : SIZE(size), spaceX(size), spaceY(size), max(-1)
+Board::Board(const int& size, int* input) throw (invalid_argument) 
+	: SIZE(size), spaceX(size), spaceY(size), max(-1)
 {
 	blocks = new int[SIZE * SIZE];
 	memcpy(blocks, input, SIZE * SIZE * sizeof(int));
@@ -52,17 +54,33 @@ Board::Board(const int& size, int* input) throw (invalid_argument) : SIZE(size),
 	numberMaxLength = GetNumberLength(max);
 }
 
+Board::Board(const Board* rhs) 
+	: SIZE(rhs->SIZE), 
+	spaceX(rhs->spaceX),
+	spaceY(rhs->spaceY),
+	max(rhs->max),
+	numberMaxLength(rhs->numberMaxLength)
+{
+	memcpy(this->blocks, rhs->blocks, SIZE * SIZE * sizeof(int));
+}
+
 Board::~Board()
 {
 	delete[] blocks;
 	blocks = nullptr;
 }
 
-bool Board::Move(const Direction& direction)
+bool Board::MoveCheck(const Direction& direction)
+{
+	int a, b;
+	return MoveCheck(direction, a, b);
+}
+
+bool Board::MoveCheck(const Direction& direction, int& positionX, int& positionY)
 {
 	// get the space position after the move
-	int positionX = ((direction & 1) ? spaceX + direction : spaceX);
-	int positionY = ((direction & 1) ? spaceY : spaceY + (direction >> 1));
+	positionX = ((direction & 1) ? spaceX + direction : spaceX);
+	positionY = ((direction & 1) ? spaceY : spaceY + (direction >> 1));
 	// check if the move is valid
 	if (positionX < 0 || positionX >= SIZE || positionY < 0 || positionY >= SIZE)
 		return false;
@@ -71,15 +89,36 @@ bool Board::Move(const Direction& direction)
 	int postionX1 = ((direction % 2) ? spaceX + direction : spaceX);
 	int postionY1 = ((direction % 2) ? spaceY : spaceY + (direction / 2));
 	*/
-	blocks[IndexOf(spaceX, spaceY)] = blocks[IndexOf(positionX,positionY)];
-	blocks[IndexOf(positionX, positionY)] = SPACE;
 	return true;
+}
+
+void Board::MovePosition(const int& positionX, const int& positionY)
+{
+	blocks[IndexOf(spaceX, spaceY)] = blocks[IndexOf(positionX, positionY)];
+	blocks[IndexOf(positionX, positionY)] = SPACE;
+}
+
+bool Board::Move(const Direction& direction)
+{
+	int positionX, positionY;
+
+	if (!MoveCheck(direction, positionX, positionY))
+		return false;
+	
+	MovePosition(positionX, positionY);
+	return true;
+	
 }
 
 bool Board::isEqualTo(const Comparable& rhs)
 {
 	return memcmp(blocks, ((Board*)&rhs)->blocks, (long long)SIZE 
 	* SIZE * sizeof(int)) == 0;
+}
+
+int* Board::GetBlocks()
+{
+	return blocks;
 }
 
 int* Board::RandomGenerator(const int& min, const int& max)

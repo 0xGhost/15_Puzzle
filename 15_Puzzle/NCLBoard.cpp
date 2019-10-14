@@ -24,6 +24,11 @@ NCLBoard::NCLBoard(const int& size, int* input) throw (invalid_argument) : Board
 	// use a binary search tree, may not? bucket may better
 }
 
+NCLBoard::NCLBoard(const NCLBoard& rhs) : Board(rhs)
+{
+}
+
+
 bool NCLBoard::IsTurnEnd()
 {
 	return spaceX == spaceY == (SIZE - 1) ? true : false;
