@@ -91,15 +91,13 @@ namespace UnitTest
 			13, 14, 15, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber* result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous();
 			ContinuousNumber result1;
 			result1.column = 0;
 			result1.row = 3;
 			result1.columnReverse = 0;
 			result1.rowReverse = 0;
-			Assert::IsTrue(*result0 == result1);
-			delete result0;
-			result0 = nullptr;
+			Assert::IsTrue(result0 == result1);
 		}
 
 		TEST_METHOD(CheckRowReverseContinuous)
@@ -111,15 +109,14 @@ namespace UnitTest
 			15, 14, 13, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber* result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous();
 			ContinuousNumber result1;
 			result1.column = 0;
 			result1.row = 0;
 			result1.columnReverse = 0;
 			result1.rowReverse = 2;
-			Assert::IsTrue(*result0 == result1);
-			delete result0;
-			result0 = nullptr;
+			Assert::IsTrue(result0 == result1);
+
 		}
 
 		TEST_METHOD(CheckColumnContinuous)
@@ -131,15 +128,14 @@ namespace UnitTest
 			4, 14, 15, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber* result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous();
 			ContinuousNumber result1;
 			result1.column = 2;
 			result1.row = 0;
 			result1.columnReverse = 0;
 			result1.rowReverse = 0;
-			Assert::IsTrue(*result0 == result1);
-			delete result0;
-			result0 = nullptr;
+			Assert::IsTrue(result0 == result1);
+
 		}
 
 		TEST_METHOD(CheckColumnReverseContinuous)
@@ -151,15 +147,14 @@ namespace UnitTest
 			1, 14, 15, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber* result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous();
 			ContinuousNumber result1;
 			result1.column = 0;
 			result1.row = 0;
 			result1.columnReverse = 2;
 			result1.rowReverse = 0;
-			Assert::IsTrue(*result0 == result1);
-			delete result0;
-			result0 = nullptr;
+			Assert::IsTrue(result0 == result1);
+
 		}
 
 		TEST_METHOD(CheckMixedContinuous1)
@@ -171,15 +166,13 @@ namespace UnitTest
 			1, 14, 15, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber* result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous();
 			ContinuousNumber result1;
 			result1.column = 1;
 			result1.row = 0;
 			result1.columnReverse = 1;
 			result1.rowReverse = 0;
-			Assert::IsTrue(*result0 == result1);
-			delete result0;
-			result0 = nullptr;
+			Assert::IsTrue(result0 == result1);
 		}
 
 		TEST_METHOD(CheckMixedContinuous2)
@@ -191,15 +184,14 @@ namespace UnitTest
 			13, 14, 15, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber* result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous();
 			ContinuousNumber result1;
 			result1.column = 0;
 			result1.row = 3;
 			result1.columnReverse = 0;
 			result1.rowReverse = 1;
-			Assert::IsTrue(*result0 == result1);
-			delete result0;
-			result0 = nullptr;
+			Assert::IsTrue(result0 == result1);
+
 		}
 
 		TEST_METHOD(CheckMixedContinuous3)
@@ -211,15 +203,51 @@ namespace UnitTest
 			1, 2, 3, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber* result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous();
 			ContinuousNumber result1;
 			result1.column = 1;
 			result1.row = 1;
 			result1.columnReverse = 0;
 			result1.rowReverse = 1;
-			Assert::IsTrue(*result0 == result1);
-			delete result0;
-			result0 = nullptr;
+			Assert::IsTrue(result0 == result1);
+
+		}
+
+		TEST_METHOD(TestToString)
+		{
+			int data[16] =
+			{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			20, 19, 18, 17,
+			13, 14, 15, -1 };
+
+			NCLBoard board1(4, data);
+			string str = "1 2 3 4 5 6 7 8 20 19 18 17 13 14 15 -1 ";
+			Assert::AreEqual(board1.ToString(), str);
+		}
+
+		TEST_METHOD(TestIsTurnEnd)
+		{
+			int data[16] =
+			{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			20, 19, 18, 17,
+			13, 14, 15, -1 };
+
+			NCLBoard board1(4, data);
+			Assert::IsTrue(board1.IsTurnEnd());
+		}
+
+		TEST_METHOD(TestIsNotTurnEnd)
+		{
+			int data[16] =
+			{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			20, 19, 18, 17,
+			13, 14, -1, 15 };
+
+			NCLBoard board1(4, data);
+			Assert::IsFalse(board1.IsTurnEnd());
 		}
 	};
 }

@@ -218,5 +218,36 @@ namespace UnitTest
 			board0.Move(Direction::Right);
 			Assert::IsTrue(board0.isEqualTo(board1));
 		}
+
+		TEST_METHOD(TestBoardMoveRightTop)
+		{
+			int afterRight[] =
+			{ 1, 2, 3, 4,
+				5, 6, 7, -1,
+				9, 10, 12, 8,
+				13, 14, 15, 20 };
+
+			Board board1(4, afterRight);
+			Board board0(4, before);
+			board0.Move(Direction::Right);
+			board0.Move(Direction::Top);
+			Assert::IsTrue(board0.isEqualTo(board1));
+		}
+
+		TEST_METHOD(TestBoardMoveRightTopLeft)
+		{
+			int afterRight[] =
+			{ 1, 2, 3, 4,
+				5, 6, -1, 7,
+				9, 10, 12, 8,
+				13, 14, 15, 20 };
+
+			Board board1(4, afterRight);
+			Board board0(4, before);
+			board0.Move(Direction::Right);
+			board0.Move(Direction::Top);
+			board0.Move(Direction::Left);
+			Assert::IsTrue(board0.isEqualTo(board1));
+		}
 	};
 }

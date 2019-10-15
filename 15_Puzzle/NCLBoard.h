@@ -2,6 +2,9 @@
 // Date created: 13/Oct/2019
 #pragma once
 #include "Board.h"
+#include <string>
+
+using std::string;
 
 struct ContinuousNumber
 {
@@ -16,6 +19,13 @@ struct ContinuousNumber
 			&& columnReverse == rhs.columnReverse
 			&& rowReverse == rhs.rowReverse;
 	}
+	inline void operator+=(const ContinuousNumber& rhs)
+	{
+		column += rhs.column;
+		row += rhs.row;
+		columnReverse += rhs.columnReverse;
+		rowReverse += rhs.rowReverse;
+	}
 };
 
 
@@ -26,11 +36,11 @@ public:
 	NCLBoard(const int& size, const int& min, const int& max) throw (std::invalid_argument) :Board(size, min, max) {}
 	NCLBoard(const int& size, int* input) throw (std::invalid_argument);
 	NCLBoard(const NCLBoard& rhs);
-	//~NCLBoard();
+	virtual ~NCLBoard() {};
 	bool IsTurnEnd(); // check if this board is a turn end 
-	ContinuousNumber* CheckContinuous(); // check full continuous in all directions
-	ContinuousNumber* CheckContinuous(int length); // check partial continuous in all directions
-
+	ContinuousNumber CheckContinuous(); // check full continuous in all directions
+	ContinuousNumber CheckContinuous(int length); // check partial continuous in all directions
+	string ToString();
 private:
 
 };

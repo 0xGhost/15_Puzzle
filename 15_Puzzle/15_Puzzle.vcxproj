@@ -95,6 +95,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <StackReserveSize>100000000</StackReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -152,13 +153,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="15_Puzzle.cpp" />
-    <ClCompile Include="BinarySearchTree.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="NCLBoard.cpp" />
     <ClCompile Include="NCLBoardTraverser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Comparable.h" />
     <ClInclude Include="NCLBoard.h" />

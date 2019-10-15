@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <ctime>
 
-#include "NCLBoard.h"
+#include "NCLBoardTraverser.h"
 
 using std::cin;
 using std::cout;
@@ -70,16 +70,40 @@ int main()
 		
 		delete c;
 		*/
-
-		int blocks[] =
+		
+		int blocks4[] =
 		{ 1, 2, 3, 4,
 		5, 6, 7, 8,
 		9, 10, 11, 12,
 		13, 14, 15, -1 };
 
-		NCLBoard board4(4, blocks);
-		cout << board4 << endl;
+		NCLBoard *board4 = new NCLBoard(4, 1, 20);
+		cout << *board4 << endl;
+		cout << board4->ToString() << endl;
 		
+		int blocks3[] =
+		{ 1, 2, 3, 4,
+		5, 6, 7, 8, -1 };
+		NCLBoard *board3 = new NCLBoard(3, blocks3);
+		cout << *board3 << endl;
+		cout << board3->ToString() << endl;
+
+		int blocks2[] =
+		{ 1, 2, 3, -1 };
+		NCLBoard *board2 = new NCLBoard(2, blocks2);
+		cout << *board2 << endl;
+		cout << board2->ToString() << endl;
+		
+		NCLBoardTraverser traverser;
+		ContinuousNumber c = traverser.Travers(board3);
+		cout << "row = " << c.row << endl;
+		cout << "rowReverse = " << c.rowReverse << endl;
+		cout << "column = " << c.column << endl;
+		cout << "columnReverse = " << c.columnReverse << endl;
+		
+		delete board4;
+		delete board3;
+		delete board2;
 	}_CrtDumpMemoryLeaks();
 
 	return 0;

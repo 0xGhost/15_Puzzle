@@ -21,7 +21,8 @@ NCLBoard::NCLBoard(const int& size, int* input) throw (invalid_argument) : Board
 		}
 	}
 	// TODO: throw exception if same number appear in the input array
-	// use a binary search tree, may not? bucket may better
+	delete[] bucket;
+	bucket = nullptr;
 }
 
 NCLBoard::NCLBoard(const NCLBoard& rhs) : Board(rhs)
@@ -31,25 +32,25 @@ NCLBoard::NCLBoard(const NCLBoard& rhs) : Board(rhs)
 
 bool NCLBoard::IsTurnEnd()
 {
-	return spaceX == spaceY == (SIZE - 1) ? true : false;
+	return (spaceX == (SIZE - 1) && spaceY == (SIZE - 1));
 }
 
-ContinuousNumber* NCLBoard::CheckContinuous()
+ContinuousNumber NCLBoard::CheckContinuous()
 {
 	// TODO: "water fall" algorithm
 	// idea: a board can not contain both continuous row and continuous column
 	/*brute force search*/
-	ContinuousNumber *result = new ContinuousNumber();
+	ContinuousNumber result;// = new ContinuousNumber();
 
 	for (int j = 0; j < SIZE; j++)
 	{
-		result->row++;
+		result.row++;
 		for (int i = 0; i < SIZE - 1; i++)
 		{
 			if (blocks[IndexOf(i, j)] != blocks[IndexOf(i + 1, j)] - 1
 				&& blocks[IndexOf(i, j)] != -1 && blocks[IndexOf(i + 1, j)] != -1)
 			{
-				result->row--;
+				result.row--;
 				break;
 			}
 		}
@@ -57,13 +58,13 @@ ContinuousNumber* NCLBoard::CheckContinuous()
 
 	for (int j = 0; j < SIZE; j++)
 	{
-		result->rowReverse++;
+		result.rowReverse++;
 		for (int i = 0; i < SIZE - 1; i++)
 		{
 			if (blocks[IndexOf(i, j)] != blocks[IndexOf(i + 1, j)] + 1
 				&& blocks[IndexOf(i, j)] != -1 && blocks[IndexOf(i + 1, j)] != -1)
 			{
-				result->rowReverse--;
+				result.rowReverse--;
 				break;
 			}
 		}
@@ -71,13 +72,13 @@ ContinuousNumber* NCLBoard::CheckContinuous()
 
 	for (int i = 0; i < SIZE; i++)
 	{
-		result->column++;
+		result.column++;
 		for (int j = 0; j < SIZE - 1; j++)
 		{
 			if (blocks[IndexOf(i, j)] != blocks[IndexOf(i, j + 1)] - 1
 				&& blocks[IndexOf(i, j)] != -1 && blocks[IndexOf(i, j + 1)] != -1)
 			{
-				result->column--;
+				result.column--;
 				break;
 			}
 		}
@@ -85,17 +86,28 @@ ContinuousNumber* NCLBoard::CheckContinuous()
 
 	for (int i = 0; i < SIZE; i++)
 	{
-		result->columnReverse++;
+		result.columnReverse++;
 		for (int j = 0; j < SIZE - 1; j++)
 		{
 			if (blocks[IndexOf(i, j)] != blocks[IndexOf(i, j + 1)] + 1
 				&& blocks[IndexOf(i, j)] != -1 && blocks[IndexOf(i, j + 1)] != -1)
 			{
-				result->columnReverse--;
+				result.columnReverse--;
 				break;
 			}
 		}
 	}
 
 	return result;
+}
+
+string NCLBoard::ToString()
+{
+	string str = "";
+	for (int i = 0; i < SIZE * SIZE; i++)
+	{
+		str += std::to_string(blocks[i]);
+		str += ' ';
+	}
+	return str;
 }

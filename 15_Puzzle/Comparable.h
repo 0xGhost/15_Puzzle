@@ -7,11 +7,11 @@ class Comparable
 {
 public:
 	
-	virtual bool isEqualTo(const Comparable& rhs) = 0;
+	virtual bool isEqualTo(const Comparable& rhs) const = 0;
 	friend std::ostream& operator<< (std::ostream& ostr, Comparable& comparable)
 	{
 		return comparable.print(ostr, comparable);
 	}
 private:
-	virtual std::ostream& print(std::ostream& ostr, const Comparable& comparable) = 0;
+	virtual std::ostream& print(std::ostream& ostr, const Comparable& comparable) const = 0;
 };
