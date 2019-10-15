@@ -103,11 +103,21 @@ ContinuousNumber NCLBoard::CheckContinuous()
 
 string NCLBoard::ToString()
 {
-	string str = "";
+	string *str = new string();
 	for (int i = 0; i < SIZE * SIZE; i++)
 	{
-		str += std::to_string(blocks[i]);
-		str += ' ';
+		*str += std::to_string(blocks[i]);
+		*str += ' ';
 	}
-	return str;
+	return *str;
+}
+
+vector<int> NCLBoard::ToVector()
+{
+	vector<int> vec;
+	for (int i = 0; i < SIZE * SIZE; i++)
+	{
+		vec.push_back(blocks[i]);
+	}
+	return vec;
 }

@@ -77,7 +77,7 @@ int main()
 		9, 10, 11, 12,
 		13, 14, 15, -1 };
 
-		NCLBoard *board4 = new NCLBoard(4, 1, 20);
+		NCLBoard *board4 = new NCLBoard(4, blocks4);
 		cout << *board4 << endl;
 		cout << board4->ToString() << endl;
 		

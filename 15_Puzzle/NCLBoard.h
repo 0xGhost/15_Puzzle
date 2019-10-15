@@ -3,8 +3,10 @@
 #pragma once
 #include "Board.h"
 #include <string>
+#include <vector>
 
 using std::string;
+using std::vector;
 
 struct ContinuousNumber
 {
@@ -41,6 +43,8 @@ public:
 	ContinuousNumber CheckContinuous(); // check full continuous in all directions
 	ContinuousNumber CheckContinuous(int length); // check partial continuous in all directions
 	string ToString();
+	vector<int> ToVector();
+
 private:
 
 };
