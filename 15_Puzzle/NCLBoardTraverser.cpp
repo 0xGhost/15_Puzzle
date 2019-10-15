@@ -47,13 +47,14 @@ NCLBoardTraverser::~NCLBoardTraverser()
 	*/
 	//delete boardSet;
 
-	_CrtDumpMemoryLeaks();
+	//_CrtDumpMemoryLeaks();
 }
 
 ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 {
 	size = board->SIZE;
 	int count = 0;
+	int Ccount = 0;
 	vector<NCLBoard*> stack;
 
 	NCLBoard* newBoard = new NCLBoard(*board);
@@ -68,9 +69,13 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 		{
 			count++;
 			totalContinuousNumber += currentBoard->CheckContinuous();
+			if (currentBoard->CheckContinuous().column > 0
+				|| currentBoard->CheckContinuous().columnReverse > 0
+				|| currentBoard->CheckContinuous().row > 0
+				|| currentBoard->CheckContinuous().rowReverse > 0) Ccount++;
 			//cout << "turn" << *currentBoard << endl;
 			
-			cout << "a = " << stack.size() << endl;
+			//cout << "a = " << stack.size() << endl;
 		}
 		if (currentBoard->MoveCheck(Direction::Top))
 		{
@@ -103,9 +108,10 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 		
 		delete currentBoard;
 		currentBoard = nullptr;
-		cout << "turn count =" << count << endl;
+		
 	}
-
+	cout << "turn count =" << count << endl;
+	cout << "turn Ccount =" << Ccount << endl;
 
 	/*
 	std::function<void(Node**, NCLBoard*, Direction)> Insert = [&](Node** tree, NCLBoard* board, Direction from)

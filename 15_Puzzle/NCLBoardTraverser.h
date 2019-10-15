@@ -44,7 +44,7 @@ public:
 	ContinuousNumber Travers(NCLBoard *board);
 	ContinuousNumber GetTotalContinuousNumber() { return totalContinuousNumber; }
 private:
-	Node* root = nullptr;
+	//Node* root = nullptr;
 	int size;
 	unordered_map<string, NCLBoard*> hashMap;
 	unordered_set<vector<int>> boardSet;

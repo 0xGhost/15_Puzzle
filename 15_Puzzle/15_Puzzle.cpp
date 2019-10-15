@@ -87,25 +87,27 @@ int main()
 		NCLBoard *board3 = new NCLBoard(3, blocks3);
 		cout << *board3 << endl;
 		cout << board3->ToString() << endl;
-
+		
 		int blocks2[] =
 		{ 1, 2, 3, -1 };
 		NCLBoard *board2 = new NCLBoard(2, blocks2);
 		cout << *board2 << endl;
 		cout << board2->ToString() << endl;
 		
+#if true		
 		NCLBoardTraverser traverser;
-		ContinuousNumber c = traverser.Travers(board3);
-		cout << "row = " << c.row << endl;
-		cout << "rowReverse = " << c.rowReverse << endl;
-		cout << "column = " << c.column << endl;
-		cout << "columnReverse = " << c.columnReverse << endl;
-		
+		traverser.Travers(board2);
+		//ContinuousNumber c = traverser.Travers(board2);
+		//cout << "row = " << c.row << endl;
+		//cout << "rowReverse = " << c.rowReverse << endl;
+		//cout << "column = " << c.column << endl;
+		//cout << "columnReverse = " << c.columnReverse << endl;
+#endif	
 		delete board4;
 		delete board3;
 		delete board2;
-	}_CrtDumpMemoryLeaks();
-
+	}
+	_CrtDumpMemoryLeaks();
 	return 0;
 
 	auto input_number = [](int& input) -> bool
