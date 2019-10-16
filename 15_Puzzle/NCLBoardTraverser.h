@@ -1,12 +1,10 @@
 #pragma once
 #include "NCLBoard.h"
-#include <set>
-#include <unordered_map>
 #include <unordered_set>
 
-using std::set;
+
 using std::string;
-using std::unordered_map;
+
 using std::unordered_set;
 
 namespace std {
@@ -38,17 +36,16 @@ struct Node
 class NCLBoardTraverser
 {
 public:
-	NCLBoardTraverser();
-	~NCLBoardTraverser();
-
-	ContinuousNumber Travers(NCLBoard *board);
+	NCLBoardTraverser(NCLBoard* board);
+	
 	ContinuousNumber GetTotalContinuousNumber() { return totalContinuousNumber; }
 private:
 	//Node* root = nullptr;
 	int size;
-	unordered_map<string, NCLBoard*> hashMap;
 	unordered_set<vector<int>> boardSet;
-	bool Search(const NCLBoard* board);
+	vector<vector<int>> boardHistory;
+	//bool Search(const NCLBoard* board);
 	ContinuousNumber totalContinuousNumber;
+	ContinuousNumber Travers(NCLBoard *board);
 };
 

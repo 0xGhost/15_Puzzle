@@ -70,7 +70,20 @@ int main()
 		
 		delete c;
 		*/
-		
+
+		int a[] = { 1,2,3,4 };
+		vector<int> b;
+		b.push_back(1);
+		b.push_back(2);
+		b.push_back(3);
+		b.push_back(4);
+		string c = "1 2 3 4 ";
+		int d = 10203040;
+		int aa = sizeof(a);
+		int bb = sizeof(b);
+		int cc = sizeof(c);
+		int dd = sizeof(d);
+
 		int blocks4[] =
 		{ 1, 2, 3, 4,
 		5, 6, 7, 8,
@@ -95,13 +108,13 @@ int main()
 		cout << board2->ToString() << endl;
 		
 #if true		
-		NCLBoardTraverser traverser;
-		traverser.Travers(board2);
-		//ContinuousNumber c = traverser.Travers(board2);
-		//cout << "row = " << c.row << endl;
-		//cout << "rowReverse = " << c.rowReverse << endl;
-		//cout << "column = " << c.column << endl;
-		//cout << "columnReverse = " << c.columnReverse << endl;
+		NCLBoardTraverser traverser(board4);
+		//traverser.Travers(board2);
+		ContinuousNumber con = traverser.GetTotalContinuousNumber();
+		cout << "row = " << con.row << endl;
+		cout << "rowReverse = " << con.rowReverse << endl;
+		cout << "column = " << con.column << endl;
+		cout << "columnReverse = " << con.columnReverse << endl;
 #endif	
 		delete board4;
 		delete board3;

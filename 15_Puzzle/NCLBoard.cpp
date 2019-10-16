@@ -40,7 +40,7 @@ ContinuousNumber NCLBoard::CheckContinuous()
 	// TODO: "water fall" algorithm
 	// idea: a board can not contain both continuous row and continuous column
 	/*brute force search*/
-	ContinuousNumber result;// = new ContinuousNumber();
+	ContinuousNumber result;
 
 	for (int j = 0; j < SIZE; j++)
 	{
