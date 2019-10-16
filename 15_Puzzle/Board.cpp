@@ -19,37 +19,33 @@ inline int GetNumberLength(int number)
 	return length;
 }
 
-Board::Board(const int& size = 4, const int& min = 1, const int& max = 20) throw (invalid_argument) 
-	: SIZE(size), spaceX(size), spaceY(size), max(max)
+Board::Board(const int& size = 4, const int& min = 1, const int& max = 20)  
+	: SIZE(size), spaceX(size - 1), spaceY(size - 1), max(max)
 {
-	if ((max - min + 1) < (size * size - 1))
-		throw invalid_argument("random range is smaller than numbers of blocks");
-	if(min <= 0)
-		throw invalid_argument("argument min must be positive integer");
 	numberMaxLength = GetNumberLength(max);
 	blocks = RandomGenerator(min, max);
 }
 
-Board::Board(const int& size, int* input) throw (invalid_argument) 
-	: SIZE(size), spaceX(size), spaceY(size), max(-1)
+Board::Board(const int& size, int* input)
+	: SIZE(size), spaceX(size - 1), spaceY(size - 1), max(-1)
 {
 	blocks = new int[SIZE * SIZE];
 	memcpy(blocks, input, SIZE * SIZE * sizeof(int));
-	bool spaceFlag = false;
-	for (int i = 0; i < SIZE * SIZE; i++)
+	if (blocks[IndexOf(spaceX, spaceY)] != SPACE)
 	{
-		max = input[i] > max ? input[i] : max;
-		if(input[i] <= 0 && input[i] != -1)
-			throw invalid_argument("value of non-space blocks must be positive integer");
-		if (input[i] == -1)
+		for (int i = 0; i < SIZE * SIZE; i++)
 		{
-			if (!spaceFlag)
-				spaceFlag = true;
-			else
-				throw invalid_argument("more than one space block");
-			spaceX = i % SIZE;
-			spaceY = i / SIZE;
+			max = input[i] > max ? input[i] : max;
+			if (input[i] == SPACE)
+			{
+				spaceX = i % SIZE;
+				spaceY = i / SIZE;
+			}
 		}
+	}
+	if (blocks[IndexOf(spaceX, spaceY)] != -1)
+	{
+		int a = 0;
 	}
 	numberMaxLength = GetNumberLength(max);
 }

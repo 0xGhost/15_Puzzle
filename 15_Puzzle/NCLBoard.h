@@ -35,12 +35,13 @@ class NCLBoard :
 	public Board
 {
 public:
-	NCLBoard(const int& size, const int& min, const int& max) throw (std::invalid_argument) :Board(size, min, max) {}
-	NCLBoard(const int& size, int* input) throw (std::invalid_argument);
-	NCLBoard(const NCLBoard& rhs);
+	NCLBoard(const int& size, const int& min, const int& max) :Board(size, min, max) {}
+	NCLBoard(const int& size, int* input) : Board(size, input){	}
+	NCLBoard(const NCLBoard& rhs) : Board(rhs) {}
 	virtual ~NCLBoard() {};
 	bool IsTurnEnd(); // check if this board is a turn end 
-	ContinuousNumber CheckContinuous(); // check full continuous in all directions
+	unsigned long GetTotalContinuousNumber(bool containSpace) const; // return continuous number (all are the same)
+	ContinuousNumber CheckContinuous(bool containSPACE); // check full continuous in all directions
 	ContinuousNumber CheckContinuous(int length); // check partial continuous in all directions
 	string ToString();
 	vector<int> ToVector();

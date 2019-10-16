@@ -95,8 +95,9 @@ int main()
 		cout << board4->ToString() << endl;
 		
 		int blocks3[] =
-		{ 1, 2, 3, 4,
-		5, 6, 7, 8, -1 };
+		{ 1, 12, 3, 14,
+		5, 16, 7, 8, -1 };
+		//NCLBoard* board3 = new NCLBoard(3, 1, 10);
 		NCLBoard *board3 = new NCLBoard(3, blocks3);
 		cout << *board3 << endl;
 		cout << board3->ToString() << endl;
@@ -108,13 +109,18 @@ int main()
 		cout << board2->ToString() << endl;
 		
 #if true		
-		NCLBoardTraverser traverser(board4);
+		NCLBoard* board0 = board3;
+		cout << "Continuous = " << board4->GetTotalContinuousNumber(false) << endl;
+		/*
+		NCLBoardTraverser traverser(board0, true);
 		//traverser.Travers(board2);
 		ContinuousNumber con = traverser.GetTotalContinuousNumber();
 		cout << "row = " << con.row << endl;
 		cout << "rowReverse = " << con.rowReverse << endl;
 		cout << "column = " << con.column << endl;
-		cout << "columnReverse = " << con.columnReverse << endl;
+		cout << "columnReverse = " << con.columnReverse << endl;*/
+		cout << "Continuous = " << board4->GetTotalContinuousNumber(true) << endl;
+		
 #endif	
 		delete board4;
 		delete board3;

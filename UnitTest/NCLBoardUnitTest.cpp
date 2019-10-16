@@ -4,11 +4,13 @@
 #include "CppUnitTest.h"
 #include "..//15_Puzzle/NCLBoard.h"
 #include "..//15_Puzzle/NCLBoard.cpp"
+#include "..//15_Puzzle/NCLBoardTraverser.h"
+#include "..//15_Puzzle/NCLBoardTraverser.cpp"
 
 #include <sstream>
 #include <iostream>
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
+#include <ctime>
+
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -27,46 +29,10 @@ namespace UnitTest
 
 		}
 		*/
-		TEST_METHOD(TestConstructorNoException1)
+		
+		TEST_CLASS_INITIALIZE(RandomSeed)
 		{
-			NCLBoard board1(4, 1, 15);
-		}
-
-		TEST_METHOD(TestConstructorNoException2)
-		{
-			NCLBoard board1(4, 3, 30);
-		}
-
-		TEST_METHOD(TestConstructorException0)
-		{
-			auto func = [&] { NCLBoard board1(4, 1, 2); };
-			Assert::ExpectException<invalid_argument>(func);
-		}
-
-		TEST_METHOD(TestConstructorException1)
-		{
-			int data[] =
-			{ 1, 2, 3, 4,
-			5, 6, 7, 8,
-			9, 10, 17, 12,
-			13, 12, 15, -1 };
-
-			
-			auto func = [&] { NCLBoard board1(4, data); };
-			Assert::ExpectException<invalid_argument>(func);
-		}
-
-		TEST_METHOD(TestConstructorException2)
-		{
-			int data[] =
-			{ 1, 2, 3, 4,
-			5, 6, 7, 8,
-			9, 10, 17, 12,
-			13, -1, 15, -1 };
-
-
-			auto func = [&] { NCLBoard board1(4, data); };
-			Assert::ExpectException<invalid_argument>(func);
+			srand((unsigned int)time(NULL));
 		}
 
 		TEST_METHOD(CheckContinuousNumberEqual)
@@ -91,7 +57,7 @@ namespace UnitTest
 			13, 14, 15, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous(true);
 			ContinuousNumber result1;
 			result1.column = 0;
 			result1.row = 3;
@@ -109,7 +75,7 @@ namespace UnitTest
 			15, 14, 13, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous(true);
 			ContinuousNumber result1;
 			result1.column = 0;
 			result1.row = 0;
@@ -128,7 +94,7 @@ namespace UnitTest
 			4, 14, 15, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous(true);
 			ContinuousNumber result1;
 			result1.column = 2;
 			result1.row = 0;
@@ -147,7 +113,7 @@ namespace UnitTest
 			1, 14, 15, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous(true);
 			ContinuousNumber result1;
 			result1.column = 0;
 			result1.row = 0;
@@ -166,7 +132,7 @@ namespace UnitTest
 			1, 14, 15, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous(true);
 			ContinuousNumber result1;
 			result1.column = 1;
 			result1.row = 0;
@@ -184,7 +150,7 @@ namespace UnitTest
 			13, 14, 15, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous(true);
 			ContinuousNumber result1;
 			result1.column = 0;
 			result1.row = 3;
@@ -203,7 +169,7 @@ namespace UnitTest
 			1, 2, 3, -1 };
 
 			NCLBoard board1(4, data);
-			ContinuousNumber result0 = board1.CheckContinuous();
+			ContinuousNumber result0 = board1.CheckContinuous(true);
 			ContinuousNumber result1;
 			result1.column = 1;
 			result1.row = 1;
@@ -248,6 +214,42 @@ namespace UnitTest
 
 			NCLBoard board1(4, data);
 			Assert::IsFalse(board1.IsTurnEnd());
+		}
+
+		TEST_METHOD(TestGetTotalContinuousNumber1)
+		{
+			int load = 5;
+			for (int i = 1; i < load; i++)
+			{
+				NCLBoard board1(3, 1, 8);
+				NCLBoardTraverser t(&board1, true);
+				ContinuousNumber c = t.GetTotalContinuousNumber();
+				Assert::AreEqual(board1.GetTotalContinuousNumber(true), c.row);
+			}
+		}
+
+		TEST_METHOD(TestGetTotalContinuousNumber2)
+		{
+			int load = 5;
+			for (int i = 1; i < load; i++)
+			{
+				NCLBoard board1(3, 1, 12);
+				NCLBoardTraverser t(&board1, true);
+				ContinuousNumber c = t.GetTotalContinuousNumber();
+				Assert::AreEqual(board1.GetTotalContinuousNumber(true), c.row);
+			}
+		}
+
+		TEST_METHOD(TestGetTotalContinuousNumber3)
+		{
+			int load = 5;
+			for (int i = 1; i < load; i++)
+			{
+				NCLBoard board1(3, 10, 30);
+				NCLBoardTraverser t(&board1, true);
+				ContinuousNumber c = t.GetTotalContinuousNumber();
+				Assert::AreEqual(board1.GetTotalContinuousNumber(true), c.row);
+			}
 		}
 	};
 }

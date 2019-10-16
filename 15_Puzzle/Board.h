@@ -21,8 +21,8 @@ class Board :
 public:
 	const int SIZE; // size of the board
 
-	Board(const int& size, const int& min, const int& max) throw (invalid_argument); // random generate a puzzle board
-	Board(const int& size, int* input) throw (invalid_argument); // input a board using an array
+	Board(const int& size, const int& min, const int& max); // random generate a puzzle board
+	Board(const int& size, int* input); // input a board using an array
 	Board(const Board& board);
 	virtual ~Board();
 	bool MoveCheck(const Direction& direction) const;
@@ -39,11 +39,11 @@ protected:
 	int IndexOf(const int& x, const int& y) const; // get 1D array index by 2D postion
 	bool MoveCheck(const Direction& direction, int& positionX, int& positionY) const;
 	void MovePosition(const int& positionX, const int& positionY);
-	
+	const int SPACE = -1; // The space block in the board is represent as -1
+
 
 private:
 	int numberMaxLength; // The max length of numbers that appear in the board. It is used for display the board
-	const int SPACE = -1; // The space block in the board is represent as -1
 	int* RandomGenerator(const int& min, const int& max); // random generate non-repeating numbers in rang [min,max]. The space in the bottom right
 	virtual std::ostream& print(std::ostream& ostr, const Comparable& comparable) const override;
 };
