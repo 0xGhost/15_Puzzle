@@ -31,21 +31,21 @@ Board::Board(const int& size, int* input)
 {
 	blocks = new int[SIZE * SIZE];
 	memcpy(blocks, input, SIZE * SIZE * sizeof(int));
-	if (blocks[IndexOf(spaceX, spaceY)] != SPACE)
+	bool spaceFlag = false;
+	for (int i = 0; i < SIZE * SIZE; i++)
 	{
-		for (int i = 0; i < SIZE * SIZE; i++)
+		max = input[i] > max ? input[i] : max;
+		if(input[i] <= 0 && input[i] != -1)
+			throw invalid_argument("value of non-space blocks must be positive integer");
+		if (input[i] == -1)
 		{
-			max = input[i] > max ? input[i] : max;
-			if (input[i] == SPACE)
-			{
-				spaceX = i % SIZE;
-				spaceY = i / SIZE;
-			}
+			if (!spaceFlag)
+				spaceFlag = true;
+			else
+				throw invalid_argument("more than one space block");
+			spaceX = i % SIZE;
+			spaceY = i / SIZE;
 		}
-	}
-	if (blocks[IndexOf(spaceX, spaceY)] != -1)
-	{
-		int a = 0;
 	}
 	numberMaxLength = GetNumberLength(max);
 }
@@ -152,7 +152,7 @@ int* Board::RandomGenerator(const int& min, const int& max)
 			{
 				delete[] bucket;
 				bucket = nullptr;
-				array[size - 1] = -1;
+				array[size - 1] = SPACE;
 				return array;
 			}
 		}
@@ -160,7 +160,7 @@ int* Board::RandomGenerator(const int& min, const int& max)
 	// defensive code
 	delete[] bucket;
 	bucket = nullptr;
-	array[size - 1] = -1;
+	array[size - 1] = SPACE;
 	return array;
 	
 }
