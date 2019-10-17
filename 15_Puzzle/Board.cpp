@@ -19,7 +19,7 @@ inline int GetNumberLength(int number)
 	return length;
 }
 
-Board::Board(const int& size = 4, const int& min = 1, const int& max = 20)  
+Board::Board(const int& size = 4, const int& min = 1, const int& max = 20)
 	: SIZE(size), spaceX(size - 1), spaceY(size - 1), max(max)
 {
 	numberMaxLength = GetNumberLength(max);
@@ -31,27 +31,27 @@ Board::Board(const int& size, int* input)
 {
 	blocks = new int[SIZE * SIZE];
 	memcpy(blocks, input, SIZE * SIZE * sizeof(int));
-	bool spaceFlag = false;
-	for (int i = 0; i < SIZE * SIZE; i++)
+	if (blocks[IndexOf(spaceX, spaceY)] != SPACE)
 	{
-		max = input[i] > max ? input[i] : max;
-		if(input[i] <= 0 && input[i] != -1)
-			throw invalid_argument("value of non-space blocks must be positive integer");
-		if (input[i] == -1)
+		for (int i = 0; i < SIZE * SIZE; i++)
 		{
-			if (!spaceFlag)
-				spaceFlag = true;
-			else
-				throw invalid_argument("more than one space block");
-			spaceX = i % SIZE;
-			spaceY = i / SIZE;
+			max = input[i] > max ? input[i] : max;
+			if (input[i] == SPACE)
+			{
+				spaceX = i % SIZE;
+				spaceY = i / SIZE;
+			}
 		}
+	}
+	if (blocks[IndexOf(spaceX, spaceY)] != -1)
+	{
+		int a = 0;
 	}
 	numberMaxLength = GetNumberLength(max);
 }
 
-Board::Board(const Board& rhs) 
-	: SIZE(rhs.SIZE), 
+Board::Board(const Board& rhs)
+	: SIZE(rhs.SIZE),
 	spaceX(rhs.spaceX),
 	spaceY(rhs.spaceY),
 	max(rhs.max),
@@ -105,16 +105,16 @@ bool Board::Move(const Direction& direction)
 
 	if (!MoveCheck(direction, positionX, positionY))
 		return false;
-	
+
 	MovePosition(positionX, positionY);
 	return true;
-	
+
 }
 
 bool Board::isEqualTo(const Comparable& rhs) const
 {
-	return memcmp(blocks, ((Board*)&rhs)->blocks, (long long)SIZE 
-	* SIZE * sizeof(int)) == 0;
+	return memcmp(blocks, ((Board*)& rhs)->blocks, (long long)SIZE
+		* SIZE * sizeof(int)) == 0;
 }
 
 int* Board::GetBlocks() const
@@ -152,7 +152,7 @@ int* Board::RandomGenerator(const int& min, const int& max)
 			{
 				delete[] bucket;
 				bucket = nullptr;
-				array[size - 1] = SPACE;
+				array[size - 1] = -1;
 				return array;
 			}
 		}
@@ -160,9 +160,9 @@ int* Board::RandomGenerator(const int& min, const int& max)
 	// defensive code
 	delete[] bucket;
 	bucket = nullptr;
-	array[size - 1] = SPACE;
+	array[size - 1] = -1;
 	return array;
-	
+
 }
 
 int Board::IndexOf(const int& x, const int& y) const
