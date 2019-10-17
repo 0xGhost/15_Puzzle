@@ -10,7 +10,7 @@ using std::invalid_argument;
 
 inline int GetNumberLength(int number)
 {
-	int length = 0;
+	int length = 1;
 	while (number)
 	{
 		number /= 10;
@@ -42,10 +42,6 @@ Board::Board(const int& size, int* input)
 				spaceY = i / SIZE;
 			}
 		}
-	}
-	if (blocks[IndexOf(spaceX, spaceY)] != -1)
-	{
-		int a = 0;
 	}
 	numberMaxLength = GetNumberLength(max);
 }
@@ -177,7 +173,14 @@ std::ostream& Board::print(std::ostream& ostr, const Comparable& comparable) con
 	{
 		for (int j = 0; j < SIZE; j++)
 		{
-			ostr << std::setw((long long)numberMaxLength + 1) << (i == j == SIZE ? ' ' : ((Board*)& comparable)->blocks[IndexOf(j, i)]);
+			int block = ((Board*)& comparable)->blocks[IndexOf(j, i)];
+			ostr << std::setw((long long)numberMaxLength + 1);
+			
+			if (block == SPACE)
+				ostr << ' ';
+			else
+				ostr << block;
+				
 		}
 		ostr << std::endl;
 	}

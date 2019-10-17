@@ -166,6 +166,10 @@
     <ClInclude Include="NCLBoard.h" />
     <ClInclude Include="NCLBoardTraverser.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="15_Puzzle.txt" />
+    <Text Include="SolutionFile.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

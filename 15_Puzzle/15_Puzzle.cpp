@@ -35,13 +35,13 @@ inline void WritePuzzleFile(const vector<NCLBoard*>& boards, const string& fileN
 	fileOutput << numberOfPuzzles;
 	for (int j = 0; j < numberOfPuzzles; j++)
 	{
-		fileOutput << boards[j];
+		fileOutput << *(boards[j]);
 	}
 	fileOutput.close();
 }
 
 // length: length of each puzzle 
-inline void ReadPuzzleFile(const int& length, vector<NCLBoard*> boards, const string& fileName) throw (invalid_argument)
+inline void ReadPuzzleFile(const int& length, vector<NCLBoard*>& boards, const string& fileName) throw (invalid_argument)
 {
 	ifstream fileInput;
 	int numberOfPuzzles;
@@ -60,14 +60,14 @@ inline void ReadPuzzleFile(const int& length, vector<NCLBoard*> boards, const st
 		}
 		inputArray[length] = -1;
 		boards.push_back(new NCLBoard(4, inputArray));
-		delete inputArray;
+		delete[] inputArray;
 		inputArray = nullptr;
 	}
 
 	fileInput.close();
 }
 
-inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const vector<int>& results, const string& fileName) throw (invalid_argument)
+inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const vector<unsigned long>& results, const string& fileName) throw (invalid_argument)
 {
 	ofstream fileOutput;
 	int numberOfPuzzles = boards.size();
@@ -78,7 +78,7 @@ inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const vector<int>
 	fileOutput << numberOfPuzzles;
 	for (int j = 0; j < numberOfPuzzles; j++)
 	{
-		fileOutput << boards[j];
+		fileOutput << *(boards[j]);
 		fileOutput << "row = " << results[j] << endl;
 		fileOutput << "column = " << results[j] << endl;
 		fileOutput << "reverse row = " << results[j] << endl;
@@ -205,7 +205,7 @@ int main()
 	
 	string puzzleFileName = "15_Puzzle.txt";
 	string solutionFileName = "SolutionFile.txt";
-	vector<int> results;
+	vector<unsigned long> results;
 	vector<NCLBoard*> boards;
 	do
 	{
@@ -266,16 +266,18 @@ int main()
 			ReadPuzzleFile(length, boards, puzzleFileName);
 			for (int i = 0; i < boards.size(); i++)
 			{
-				results[i] = boards[i]->GetTotalContinuousNumber(containSpace);
-				std::cout << boards[i];
-				std::cout << "row = " << results[i] << endl;
-				std::cout << "column = " << results[i] << endl;
-				std::cout << "reverse row = " << results[i] << endl;
-				std::cout << "reverse column = " << results[i] << endl;
+				unsigned long result = boards[i]->GetTotalContinuousNumber(containSpace);
+				std::cout << *boards[i];
+				std::cout << "row = " << result << endl;
+				std::cout << "column = " << result << endl;
+				std::cout << "reverse row = " << result << endl;
+				std::cout << "reverse column = " << result << endl;
+				results.push_back(result);
 			}
 			break;
 		case 5:
-			WriteSolutionFile(boards, results, puzzleFileName);
+			WriteSolutionFile(boards, results, solutionFileName);
+			break;
 		case 6:
 			std::cout << " 0: not contain SPACE.    1: contain SPACE." << endl;
 			InputInteger(inputNumber, 0, 1);
