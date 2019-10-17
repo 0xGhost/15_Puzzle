@@ -224,7 +224,7 @@ namespace UnitTest
 				NCLBoard board1(3, 1, 8);
 				NCLBoardTraverser t(&board1, true);
 				ContinuousNumber c = t.GetTotalContinuousNumber();
-				Assert::AreEqual(board1.GetTotalContinuousNumber(true), c.row);
+				Assert::AreEqual(board1.GetTotalContinuousNumber(true), (unsigned long)c.row);
 			}
 		}
 
@@ -236,7 +236,7 @@ namespace UnitTest
 				NCLBoard board1(3, 1, 12);
 				NCLBoardTraverser t(&board1, true);
 				ContinuousNumber c = t.GetTotalContinuousNumber();
-				Assert::AreEqual(board1.GetTotalContinuousNumber(true), c.row);
+				Assert::AreEqual(board1.GetTotalContinuousNumber(true), (unsigned long)c.row);
 			}
 		}
 
@@ -248,7 +248,7 @@ namespace UnitTest
 				NCLBoard board1(3, 10, 30);
 				NCLBoardTraverser t(&board1, true);
 				ContinuousNumber c = t.GetTotalContinuousNumber();
-				Assert::AreEqual(board1.GetTotalContinuousNumber(true), c.row);
+				Assert::AreEqual(board1.GetTotalContinuousNumber(true), (unsigned long)c.row);
 			}
 		}
 	};

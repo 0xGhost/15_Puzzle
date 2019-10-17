@@ -41,7 +41,7 @@ unsigned long NCLBoard::GetTotalContinuousNumber(bool containSpace) const
 	// find all continuous parts in array blocks 
 	vector<int> lengthOfCP;
 	int count = 0;
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < size - 1; i++)
 	{
 		if (blocks[i] + 1 == blocks[i + 1])
 		{
@@ -56,6 +56,13 @@ unsigned long NCLBoard::GetTotalContinuousNumber(bool containSpace) const
 			count = 0;
 		}
 	}
+	if (count > 0)
+	{
+		lengthOfCP.push_back(count + 1);
+	}
+
+	delete[] blocks;
+	blocks = nullptr;
 	// for each continuous parts(n: length of each part)
 	for (const int& n : lengthOfCP)
 	{

@@ -1,3 +1,5 @@
+// Author: Yiang Lu
+// Date created: 15/Oct/2019
 #include "NCLBoardTraverser.h"
 #include <functional>
 #include <queue>

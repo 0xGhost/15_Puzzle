@@ -1,3 +1,5 @@
+// Author: Yiang Lu
+// Date created: 15/Oct/2019
 #pragma once
 #include "NCLBoard.h"
 #include <unordered_set>

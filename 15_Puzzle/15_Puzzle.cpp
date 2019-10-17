@@ -6,15 +6,13 @@
 #include <limits>
 #include <stdlib.h>
 #include <ctime>
-
+#include <stdexcept>
+#include <fstream>
+#include <string>
+#include <unordered_set>
 #include "NCLBoardTraverser.h"
 
-using std::cin;
-using std::cout;
-using std::endl; 
-using std::streamsize;
-using std::numeric_limits;
-using std::string;
+using namespace std;
 
 #define MEMORY_LEAK_CHECK true
 
@@ -25,6 +23,112 @@ using std::string;
 
 
 
+
+inline void WritePuzzleFile(const vector<NCLBoard*>& boards, const string& fileName)
+{
+	ofstream fileOutput;
+	int numberOfPuzzles = boards.size;
+	fileOutput.open(fileName.c_str);
+
+	if(fileOutput.fail())
+		throw invalid_argument("Fail to write the file \"" + fileName + "\".");
+	fileOutput << numberOfPuzzles;
+	for (int j = 0; j < numberOfPuzzles; j++)
+	{
+		fileOutput << boards[j];
+	}
+	fileOutput.close();
+}
+
+// length: length of each puzzle 
+inline void ReadPuzzleFile(const int& length, vector<NCLBoard*> boards, const string& fileName) throw (invalid_argument)
+{
+	ifstream fileInput;
+	int numberOfPuzzles;
+
+	fileInput.open(fileName.c_str());
+
+	if (fileInput.fail())
+		throw invalid_argument("Fail to read the file \""+ fileName + "\".");
+	fileInput >> numberOfPuzzles;
+	for (int j = 0; j < numberOfPuzzles; j++)
+	{
+		int *inputArray = new int[length + 1];
+		for (int i = 0; i < length; i++)
+		{
+			fileInput >> inputArray[i];
+		}
+		inputArray[length] = -1;
+		boards.push_back(new NCLBoard(4, inputArray));
+		delete inputArray;
+		inputArray = nullptr;
+	}
+
+	fileInput.close();
+}
+
+inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const vector<int>& results, const string& fileName) throw (invalid_argument)
+{
+	ofstream fileOutput;
+	int numberOfPuzzles = boards.size;
+	fileOutput.open(fileName.c_str);
+
+	if (fileOutput.fail())
+		throw invalid_argument("Fail to write the file \"" + fileName + "\".");
+	fileOutput << numberOfPuzzles;
+	for (int j = 0; j < numberOfPuzzles; j++)
+	{
+		fileOutput << boards[j];
+		fileOutput << "row = " << results[j] << endl;
+		fileOutput << "column = " << results[j] << endl;
+		fileOutput << "reverse row = " << results[j] << endl;
+		fileOutput << "reverse column = " << results[j] << endl;
+	}
+	fileOutput.close();
+}
+
+inline int* inputBoardConfiguration(const int& length)
+{
+	unordered_set<int> hashTable;
+	int* array = new int[length];
+	int inputNumber;
+	for (int i = 0; i < length; i++)
+	{
+		do
+		{
+			InputInteger(inputNumber, 1, INT_MAX);
+			if (hashTable.count(inputNumber) != 0)
+			{
+				std::cout << "Number " << inputNumber << " is already exist." << endl;
+				continue;
+			}
+			hashTable.insert(inputNumber);
+		} while (true);
+		
+	}
+}
+
+inline bool InputInteger(int& input, const int& min, const int& max)
+{
+	int inputNumber;
+
+	cin >> inputNumber;
+	cin.clear();
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	if (cin.fail() || inputNumber < min || inputNumber > max)
+	{
+		std::cout << "Please enter a valid integer in Range (" << min << ", " << max << "): ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		return false;
+	}
+	else
+	{
+		input = inputNumber;
+		return true;
+	}
+}
+
 int main()
 {
 	srand((unsigned)time(0));
@@ -32,57 +136,8 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 #endif
-
+#if false
 	{
-		/*
-		int before[] = 
-		{ 1, 2, 3, 4,
-		5, 6, 7, 8,
-		9, 10, -1, 12,
-		13, 14, 15, 20 };
-
-		int afterBottom[] =
-		{ 1, 2, 3, 4,
-			5, 6, 7, 8,
-			9, 10, 15, 12,
-			13, 14, -1, 20 };
-		Board board0(4, before);
-		Board board1(4, afterBottom);
-		cout << board0 << endl;
-		cout << board1 << endl;
-		board0.Move(Direction::Bottom);
-		cout << board0 << endl;
-		cout << board1 << endl;
-		bool a = board0.isEqualTo(board1);
-
-		int data[16] =
-		{ 1, 2, 3, 4,
-		5, 6, 7, 8,
-		9, 10, 17, 12,
-		13, 14, 15, -1 };
-
-		NCLBoard board3(4, data);
-		ContinuousNumber* c = board3.CheckContinuous();
-		cout << c->row << endl;
-		cout << c->rowReverse << endl;
-		cout << c->column << endl;
-		cout << c->columnReverse << endl;
-		
-		delete c;
-		*/
-
-		int a[] = { 1,2,3,4 };
-		vector<int> b;
-		b.push_back(1);
-		b.push_back(2);
-		b.push_back(3);
-		b.push_back(4);
-		string c = "1 2 3 4 ";
-		unsigned long long d = 102030405060708000;
-		int aa = sizeof(a);
-		int bb = sizeof(b);
-		int cc = sizeof(c);
-		int dd = sizeof(d);
 
 		int blocks4[] =
 		{ 1, 2, 3, 4,
@@ -99,7 +154,7 @@ int main()
 		//205, 7, 18, 4, -1 };
 		int blocks3[] =
 		{ 1, 2, 3, 4,
-		5, 6, 7, 8, -1 };
+		5, 6, -1, 8, 9 };
 		NCLBoard *board3 = new NCLBoard(3, blocks3);
 		cout << *board3 << endl;
 		cout << board3->ToString() << endl;
@@ -110,9 +165,9 @@ int main()
 		cout << *board2 << endl;
 		cout << board2->ToString() << endl;
 		
-#if true		
-		NCLBoard* board0 = board3;
-		cout << "Continuous = " << board4->GetTotalContinuousNumber(false) << endl;
+		
+		NCLBoard* board0 = board4;
+		cout << "Continuous = " << board0->GetTotalContinuousNumber(false) << endl;
 		/*
 		NCLBoardTraverser traverser(board0, true);
 		//traverser.Travers(board2);
@@ -121,78 +176,78 @@ int main()
 		cout << "rowReverse = " << con.rowReverse << endl;
 		cout << "column = " << con.column << endl;
 		cout << "columnReverse = " << con.columnReverse << endl;*/
-		cout << "Continuous = " << board4->GetTotalContinuousNumber(true) << endl;
+		cout << "Continuous = " << board0->GetTotalContinuousNumber(true) << endl;
 		
-#endif	
+
 		delete board4;
 		delete board3;
 		delete board2;
 	}
 	_CrtDumpMemoryLeaks();
 	return 0;
+#endif	
 
-	auto input_number = [](int& input) -> bool
-	{
-		int inputNumber;
-
-		cin >> inputNumber;
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		if (cin.fail())
-		{
-			cout << "Please enter a valid integer." << endl;
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			return false;
-		}
-		else
-		{
-			input = inputNumber;
-			return true;
-		}
-	};
-
-
-
+	int size = 4; // puzzle size
+	int length = size * size - 1; // number of the puzzle blocks
 	int option;
-	bool flag = true;
+	bool exitFlag = true;
+	
+	string puzzleFileName = "15_Puzzle.txt";
+	string solutionFileName = "SolutionFile.txt";
+	vector<int> results;
+	vector<NCLBoard*> boards;
 	do
 	{
-		cout << "\n1 :Manually type in a 15-puzzle configuration "
+		std::cout <<"\n0: exit the program"
+			<< "\n1 :Manually type in a 15-puzzle configuration "
 			<< "\n2: Random create 15-Puzzle configurations  "
 			<< "\n3: Produce 15-Puzzle file "
-			<< "\n4: Read 15-Puzzle file and output the Solution-File "
+			<< "\n4: Read 15-Puzzle file and output result on screen "
+			<< "\n5: Output the Solution-File "
+			<< "\n6: Go Crazy!"
 			<< endl;
-		if (input_number(option))
+		if (InputInteger(option, 0, 6))
 		{
 			int inputNumber;
 
 			switch (option)
 			{
+			case 0:
+				exitFlag = false;
+				// TODO: to another 'fun' to do 'fun' things! (if time avaliable)
+				break;
 			case 1:
 				{
-					cout << "enter 15 integers: ";
-					int counter = 15;
-					while (counter >= 0)
-					{
-						//if(input_number())
-						counter--;
-					}
+					std::cout << "Enter " << length <<" positive integers: ";
+					int* inputArray = inputBoardConfiguration(length);
+					NCLBoard(size, inputArray);
+
+					// TODO: use a function to Make sure not to allow repeated numbers for the blocks 
+					// and maybe done the input and return *array
+					// create NCLBoard using this        -> ^^^
+						
 				}
 
 				break;
 			case 2:
-				cout << endl;
-				
-				cout << "TODO: ";
-
-				cout << endl;
+				std::cout << "How many board configurations? Enter a positive integer: ";
+				InputInteger(inputNumber, 1, INT_MAX);
+				for (int i = 0; i < inputNumber; i++)
+				{
+					NCLBoard *newBoard = new NCLBoard(size, 1, 20);
+					boards.push_back(newBoard);
+				}
 				break;
 			case 3:
-				// TODO: output file
+				WritePuzzleFile(boards, puzzleFileName);
 				break;
 			case 4:
-				// TODO: read calculate and write
+				ReadPuzzleFile(length, boards, puzzleFileName);
+				break;
+			case 5:
+				WriteSolutionFile(boards, results, puzzleFileName);
+			case 6:
+				// TODO: to another 'fun' to do 'fun' things! (if time avaliable)
 				break;
 			default:
 				break;
@@ -200,7 +255,13 @@ int main()
 		}
 		
 
-	} while (flag);
+	} while (exitFlag);
+
+	for (NCLBoard* board : boards)
+	{
+		delete board;
+		board = nullptr;
+	}
 
 #if MEMORY_LEAK_CHECK
 	_CrtDumpMemoryLeaks();
