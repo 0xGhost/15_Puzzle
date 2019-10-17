@@ -37,7 +37,7 @@ struct Node
 class NCLBoardTraverser
 {
 public:
-	NCLBoardTraverser(NCLBoard* board);
+	NCLBoardTraverser(NCLBoard* board, const bool& containSPACE);
 	
 	ContinuousNumber GetTotalContinuousNumber() { return totalContinuousNumber; }
 private:
@@ -47,6 +47,6 @@ private:
 	//vector<vector<int>> boardHistory;
 	//bool Search(const NCLBoard* board);
 	ContinuousNumber totalContinuousNumber;
-	ContinuousNumber Travers(NCLBoard *board);
+	ContinuousNumber Travers(NCLBoard *board, const bool& containSPACE);
 };
 

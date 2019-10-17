@@ -21,8 +21,8 @@ class Board :
 public:
 	const int SIZE; // size of the board
 
-	Board(const int& size, const int& min, const int& max) throw (invalid_argument); // random generate a puzzle board
-	Board(const int& size, int* input) throw (invalid_argument); // input a board using an array
+	Board(const int& size, const int& min, const int& max); // random generate a puzzle board
+	Board(const int& size, int* input); // input a board using an array
 	Board(const Board& board);
 	virtual ~Board();
 	bool MoveCheck(const Direction& direction) const;

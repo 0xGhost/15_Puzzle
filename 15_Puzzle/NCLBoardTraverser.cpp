@@ -7,28 +7,28 @@ using std::cout;
 using std::endl;
 using std::queue;
 
-NCLBoardTraverser::NCLBoardTraverser(NCLBoard* board) : size(0)
+NCLBoardTraverser::NCLBoardTraverser(NCLBoard* board, const bool& containSPACE) : size(0)
 {
-	Travers(board);
+	Travers(board, containSPACE);
 }
 
 // queue -> 1
 // stack -> 0
 #if 1
 
-ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
+ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board, const bool& containSPACE)
 {
 	size = board->SIZE;
-	int count = 0;
-	int Ccount = 0;
-	int setcount = 0;
+	//int count = 0;
+	//int Ccount = 0;
+	//int setcount = 0;
 	//vector<NCLBoard*> stack;
 	queue<NCLBoard*> queue;
 	//std::vector<vector<int>>::iterator it;//////////////////////vector history
 	NCLBoard* newBoard = new NCLBoard(*board);
 	queue.push(newBoard);
 	//stack.push_back(newBoard);
-	boardSet.insert(newBoard->ToVector()); setcount++;
+	boardSet.insert(newBoard->ToVector()); //setcount++;
 	NCLBoard *currentBoard;
 	
 	while (!queue.empty())
@@ -46,12 +46,12 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 		//cout << "Nturn" << *currentBoard << endl;
 		if (currentBoard->IsTurnEnd())
 		{
-			count++;
-			totalContinuousNumber += currentBoard->CheckContinuous();
-			if (currentBoard->CheckContinuous().column > 0
+			//count++;
+			totalContinuousNumber += currentBoard->CheckContinuous(containSPACE);
+			/*if (currentBoard->CheckContinuous().column > 0
 				|| currentBoard->CheckContinuous().columnReverse > 0
 				|| currentBoard->CheckContinuous().row > 0
-				|| currentBoard->CheckContinuous().rowReverse > 0) Ccount++;
+				|| currentBoard->CheckContinuous().rowReverse > 0) Ccount++;*/
 			//cout << "turn" << *currentBoard << endl;
 			//cout << "setCount = " << setcount << endl;
 			//cout << "a = " << stack.size() << endl;
@@ -66,7 +66,7 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 			{
 				queue.push(newBoard);
 				boardSet.insert(newBoard->ToVector());
-				setcount++;
+				//setcount++;
 				//stack.push_back(newBoard);
 			}
 			else 
@@ -84,7 +84,7 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 			{
 				queue.push(newBoard);
 				boardSet.insert(newBoard->ToVector());
-				setcount++;
+				//setcount++;
 				//stack.push_back(newBoard);
 			}
 			else
@@ -102,7 +102,7 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 			{
 				queue.push(newBoard);
 				boardSet.insert(newBoard->ToVector());
-				setcount++;
+				//setcount++;
 				//stack.push_back(newBoard);
 			}
 			else
@@ -120,7 +120,7 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 			{
 				queue.push(newBoard);
 				boardSet.insert(newBoard->ToVector());
-				setcount++;
+				//setcount++;
 				//stack.push_back(newBoard);
 			}
 			else
@@ -135,11 +135,11 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 	}
 	
 		
-
+	/*
 	cout << "turn count =" << count << endl;
 	cout << "turn Ccount =" << Ccount << endl;
 	cout << "setCount = " << setcount << endl;
-
+	*/
 	return totalContinuousNumber;
 }
 

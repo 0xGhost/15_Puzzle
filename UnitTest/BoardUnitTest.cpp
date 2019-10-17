@@ -39,48 +39,6 @@ namespace UnitTest
 			Assert::AreEqual(3, GetNumberLength(123));
 		}
 
-		TEST_METHOD(TestConstructorException)
-		{
-			auto func = [this] { Board board(4, -3, 2); };
-			Assert::ExpectException<invalid_argument>(func);
-		}
-
-		TEST_METHOD(TestConstructorException0)
-		{
-			auto func = [this] { Board board(4, 0, 2); };
-			Assert::ExpectException<invalid_argument>(func);
-		}
-
-		TEST_METHOD(TestConstructorException1)
-		{
-			auto func = [this] { Board board(4, 1, 2); };
-			Assert::ExpectException<invalid_argument>(func);
-		}
-
-		TEST_METHOD(TestConstructorException2)
-		{
-			int input[] =
-			{ 1, 2, 3, 4,
-			5, 6, 7, 8,
-			9, 10, -1, 12,
-			13, 14, -1, 20 };
-
-			auto func = [&] { Board board(4, input); };
-			Assert::ExpectException<invalid_argument>(func);
-		}
-
-		TEST_METHOD(TestConstructorException3)
-		{
-			int input[] =
-			{ 1, 2, 3, 4,
-			5, 6, 7, 8,
-			9, 10, -1, 12,
-			13, 14, -7, 20 };
-
-			auto func = [&] { Board board(4, input); };
-			Assert::ExpectException<invalid_argument>(func);
-		}
-
 		TEST_METHOD(TestBoardEqual)
 		{
 			int after[] =
