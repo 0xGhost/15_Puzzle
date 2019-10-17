@@ -32,13 +32,13 @@
     <ClInclude Include="Board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Comparable.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="NCLBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NCLBoardTraverser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Comparable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

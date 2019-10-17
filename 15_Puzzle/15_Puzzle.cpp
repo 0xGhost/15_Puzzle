@@ -27,8 +27,8 @@ using namespace std;
 inline void WritePuzzleFile(const vector<NCLBoard*>& boards, const string& fileName)
 {
 	ofstream fileOutput;
-	int numberOfPuzzles = boards.size;
-	fileOutput.open(fileName.c_str);
+	int numberOfPuzzles = boards.size();
+	fileOutput.open(fileName.c_str());
 
 	if(fileOutput.fail())
 		throw invalid_argument("Fail to write the file \"" + fileName + "\".");
@@ -70,8 +70,8 @@ inline void ReadPuzzleFile(const int& length, vector<NCLBoard*> boards, const st
 inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const vector<int>& results, const string& fileName) throw (invalid_argument)
 {
 	ofstream fileOutput;
-	int numberOfPuzzles = boards.size;
-	fileOutput.open(fileName.c_str);
+	int numberOfPuzzles = boards.size();
+	fileOutput.open(fileName.c_str());
 
 	if (fileOutput.fail())
 		throw invalid_argument("Fail to write the file \"" + fileName + "\".");
@@ -85,6 +85,36 @@ inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const vector<int>
 		fileOutput << "reverse column = " << results[j] << endl;
 	}
 	fileOutput.close();
+}
+
+inline void InputInteger(int& input, const int& min, const int& max)
+{
+	int inputNumber;
+
+	do
+	{
+		cin >> inputNumber;
+		if (!cin.fail() && inputNumber >= min && inputNumber <= max)
+			break;
+		std::cout << "Please enter a valid integer in Range (" << min << ", " << max << "): ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	} while (1);
+	input = inputNumber;
+	/*
+	cin >> inputNumber;
+	cin.clear();
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	while (cin.fail() || inputNumber < min || inputNumber > max)
+	{
+		std::cout << "Please enter a valid integer in Range (" << min << ", " << max << "): ";
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+	}*/
+
+
+	
 }
 
 inline int* inputBoardConfiguration(const int& length)
@@ -103,30 +133,10 @@ inline int* inputBoardConfiguration(const int& length)
 				continue;
 			}
 			hashTable.insert(inputNumber);
-		} while (true);
-		
+			array[i] = inputNumber;
+		} while (false);
 	}
-}
-
-inline bool InputInteger(int& input, const int& min, const int& max)
-{
-	int inputNumber;
-
-	cin >> inputNumber;
-	cin.clear();
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	if (cin.fail() || inputNumber < min || inputNumber > max)
-	{
-		std::cout << "Please enter a valid integer in Range (" << min << ", " << max << "): ";
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		return false;
-	}
-	else
-	{
-		input = inputNumber;
-		return true;
-	}
+	return array;
 }
 
 int main()
@@ -190,7 +200,8 @@ int main()
 	int size = 4; // puzzle size
 	int length = size * size - 1; // number of the puzzle blocks
 	int option;
-	bool exitFlag = true;
+	bool exitFlag = false;
+	bool containSpace = true;
 	
 	string puzzleFileName = "15_Puzzle.txt";
 	string solutionFileName = "SolutionFile.txt";
@@ -199,63 +210,84 @@ int main()
 	do
 	{
 		std::cout <<"\n0: exit the program"
-			<< "\n1 :Manually type in a 15-puzzle configuration "
+			<< "\n1: Manually type in a 15-puzzle configuration "
 			<< "\n2: Random create 15-Puzzle configurations  "
 			<< "\n3: Produce 15-Puzzle file "
 			<< "\n4: Read 15-Puzzle file and output result on screen "
 			<< "\n5: Output the Solution-File "
-			<< "\n6: Go Crazy!"
+			<< "\n6: Set if continuous contain space, now is: " << (containSpace?"contain":"not contain")
+			<< "\n7: Go Crazy!"
 			<< endl;
-		if (InputInteger(option, 0, 6))
+		InputInteger(option, 0, 6);
+		
+		int inputNumber;
+
+		switch (option)
 		{
-			int inputNumber;
-
-			switch (option)
+		case 0:
+			exitFlag = true;
+			
+			break;
+		case 1:
 			{
-			case 0:
-				exitFlag = false;
-				// TODO: to another 'fun' to do 'fun' things! (if time avaliable)
-				break;
-			case 1:
-				{
-					std::cout << "Enter " << length <<" positive integers: ";
-					int* inputArray = inputBoardConfiguration(length);
-					NCLBoard(size, inputArray);
-
-					// TODO: use a function to Make sure not to allow repeated numbers for the blocks 
-					// and maybe done the input and return *array
-					// create NCLBoard using this        -> ^^^
+				std::cout << "Enter " << length <<" positive integers: ";
+				int* inputArray = inputBoardConfiguration(length);
+				NCLBoard *newBoard = new NCLBoard(size, inputArray);
+				boards.push_back(newBoard);
+				delete inputArray;
+				inputArray = nullptr;
+				// TODO: use a function to Make sure not to allow repeated numbers for the blocks 
+				// and maybe done the input and return *array
+				// create NCLBoard using this        -> ^^^
 						
-				}
-
-				break;
-			case 2:
-				std::cout << "How many board configurations? Enter a positive integer: ";
-				InputInteger(inputNumber, 1, INT_MAX);
-				for (int i = 0; i < inputNumber; i++)
-				{
-					NCLBoard *newBoard = new NCLBoard(size, 1, 20);
-					boards.push_back(newBoard);
-				}
-				break;
-			case 3:
-				WritePuzzleFile(boards, puzzleFileName);
-				break;
-			case 4:
-				ReadPuzzleFile(length, boards, puzzleFileName);
-				break;
-			case 5:
-				WriteSolutionFile(boards, results, puzzleFileName);
-			case 6:
-				// TODO: to another 'fun' to do 'fun' things! (if time avaliable)
-				break;
-			default:
-				break;
 			}
+
+			break;
+		case 2:
+			std::cout << "How many board configurations? Enter a positive integer: ";
+			InputInteger(inputNumber, 1, INT_MAX);
+			for (int i = 0; i < inputNumber; i++)
+			{
+				NCLBoard *newBoard = new NCLBoard(size, 1, 20);
+				boards.push_back(newBoard);
+			}
+			break;
+		case 3:
+			if (boards.size() == 0)
+			{
+				std::cout << "There is no puzzle to write into file." << endl;
+			}
+			else
+			{
+				WritePuzzleFile(boards, puzzleFileName);
+			}
+			break;
+		case 4:
+			ReadPuzzleFile(length, boards, puzzleFileName);
+			for (int i = 0; i < boards.size(); i++)
+			{
+				results[i] = boards[i]->GetTotalContinuousNumber(containSpace);
+				std::cout << boards[i];
+				std::cout << "row = " << results[i] << endl;
+				std::cout << "column = " << results[i] << endl;
+				std::cout << "reverse row = " << results[i] << endl;
+				std::cout << "reverse column = " << results[i] << endl;
+			}
+			break;
+		case 5:
+			WriteSolutionFile(boards, results, puzzleFileName);
+		case 6:
+			std::cout << " 0: not contain SPACE.    1: contain SPACE." << endl;
+			InputInteger(inputNumber, 0, 1);
+			containSpace = inputNumber;
+		case 7:
+			// TODO: to another 'fun' to do 'fun' things! (if time avaliable)
+			break;
+		default:
+			break;
 		}
 		
-
-	} while (exitFlag);
+	} while (!exitFlag);
 
 	for (NCLBoard* board : boards)
 	{
