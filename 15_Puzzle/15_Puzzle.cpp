@@ -78,7 +78,7 @@ int main()
 		b.push_back(3);
 		b.push_back(4);
 		string c = "1 2 3 4 ";
-		int d = 10203040;
+		unsigned long long d = 102030405060708000;
 		int aa = sizeof(a);
 		int bb = sizeof(b);
 		int cc = sizeof(c);
@@ -94,9 +94,12 @@ int main()
 		cout << *board4 << endl;
 		cout << board4->ToString() << endl;
 		
+		//int blocks3[] =
+		//{ 1, 2, 3, 15,
+		//205, 7, 18, 4, -1 };
 		int blocks3[] =
-		{ 1, 2, 3, 4,
-		5, 6, 7, 8, -1 };
+		{ 8, 7, 6, 5,
+		4, 3, 2, 1, -1 };
 		NCLBoard *board3 = new NCLBoard(3, blocks3);
 		cout << *board3 << endl;
 		cout << board3->ToString() << endl;

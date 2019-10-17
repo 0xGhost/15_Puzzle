@@ -39,9 +39,9 @@ Board::Board(const int& size, int* input) throw (invalid_argument)
 	for (int i = 0; i < SIZE * SIZE; i++)
 	{
 		max = input[i] > max ? input[i] : max;
-		if(input[i] <= 0 && input[i] != -1)
+		if(input[i] <= 0 && input[i] != SPACE)
 			throw invalid_argument("value of non-space blocks must be positive integer");
-		if (input[i] == -1)
+		if (input[i] == SPACE)
 		{
 			if (!spaceFlag)
 				spaceFlag = true;
@@ -156,7 +156,7 @@ int* Board::RandomGenerator(const int& min, const int& max)
 			{
 				delete[] bucket;
 				bucket = nullptr;
-				array[size - 1] = -1;
+				array[size - 1] = SPACE;
 				return array;
 			}
 		}
@@ -164,7 +164,7 @@ int* Board::RandomGenerator(const int& min, const int& max)
 	// defensive code
 	delete[] bucket;
 	bucket = nullptr;
-	array[size - 1] = -1;
+	array[size - 1] = SPACE;
 	return array;
 	
 }

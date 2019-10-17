@@ -9,8 +9,8 @@ using std::unordered_set;
 
 namespace std {
 	template <>
-	struct hash<std::vector<int>> {
-		size_t operator()(const vector<int>& v) const {
+	struct hash<std::vector<char>> {
+		size_t operator()(const vector<char>& v) const {
 			std::hash<int> hasher;
 			size_t seed = 0;
 			for (int i : v) {
@@ -31,6 +31,7 @@ struct Node
 	Node* left = nullptr;
 	Node* right = nullptr;
 	Direction from = Null;
+
 };
 
 class NCLBoardTraverser
@@ -42,8 +43,8 @@ public:
 private:
 	//Node* root = nullptr;
 	int size;
-	unordered_set<vector<int>> boardSet;
-	vector<vector<int>> boardHistory;
+	unordered_set<vector<char>> boardSet;
+	//vector<vector<int>> boardHistory;
 	//bool Search(const NCLBoard* board);
 	ContinuousNumber totalContinuousNumber;
 	ContinuousNumber Travers(NCLBoard *board);

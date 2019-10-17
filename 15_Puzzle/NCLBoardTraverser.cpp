@@ -37,7 +37,7 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 		currentBoard = queue.front();
 		queue.pop();
 		//stack.pop_back();
-		vector<int> history = currentBoard->ToVector();
+		vector<char> history = currentBoard->ToVector();
 		//history.push_back(setcount);
 		
 		//boardHistory.push_back(currentBoard->ToVector());

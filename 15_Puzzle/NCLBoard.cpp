@@ -11,7 +11,7 @@ NCLBoard::NCLBoard(const int& size, int* input) throw (invalid_argument) : Board
 	memset(bucket, false, (max + 1) * sizeof(bool));
 	for (int i = 0; i < SIZE * SIZE; i++)
 	{
-		if (input[i] == -1) continue;
+		if (input[i] == SPACE) continue;
 		else
 		{
 			if (bucket[input[i]])
@@ -112,12 +112,14 @@ string NCLBoard::ToString()
 	return str;
 }
 
-vector<int> NCLBoard::ToVector()
+vector<char> NCLBoard::ToVector()
 {
-	vector<int> vec;
+	vector<char> vec;
 	for (int i = 0; i < SIZE * SIZE; i++)
 	{
-		vec.push_back(blocks[i]);
+		if(blocks[i] == -1)
+			vec.push_back('0');
+		vec.push_back(blocks[i] + '0');
 	}
 	return vec;
 }

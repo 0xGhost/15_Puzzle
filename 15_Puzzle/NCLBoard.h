@@ -43,7 +43,7 @@ public:
 	ContinuousNumber CheckContinuous(); // check full continuous in all directions
 	ContinuousNumber CheckContinuous(int length); // check partial continuous in all directions
 	string ToString();
-	vector<int> ToVector();
+	vector<char> ToVector();
 
 private:
 
