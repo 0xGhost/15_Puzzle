@@ -209,7 +209,7 @@ int main()
 			<< "\n4: Read 15-Puzzle file and output result on screen (this action will remove all puzzle stored in memory)"
 			<< "\n5: Output the Solution-File "
 			<< "\n6: Set if continuous contain space, now is: " << (containSpace ? "contain" : "not contain")
-			<< "\n7: Go Crazy!"
+			<< "\n7: find partial continuous "
 			<< endl;
 		InputInteger(option, 0, 6);
 		
