@@ -2,7 +2,6 @@
 // Date created: 10/Oct/2019
 #include "Board.h"
 #include <deque>
-
 #include <iomanip>
 
 using std::deque;
@@ -10,7 +9,7 @@ using std::invalid_argument;
 
 inline int GetNumberLength(int number)
 {
-	int length = 1;
+	int length = 0;
 	while (number)
 	{
 		number /= 10;
@@ -174,7 +173,7 @@ std::ostream& Board::print(std::ostream& ostr, const Comparable& comparable) con
 		for (int j = 0; j < SIZE; j++)
 		{
 			int block = ((Board*)& comparable)->blocks[IndexOf(j, i)];
-			ostr << std::setw((long long)numberMaxLength + 1);
+			ostr << std::setw((long long)numberMaxLength + 2);
 			
 			if (block == SPACE)
 				ostr << ' ';

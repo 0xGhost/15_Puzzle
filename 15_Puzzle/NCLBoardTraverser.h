@@ -4,9 +4,7 @@
 #include "NCLBoard.h"
 #include <unordered_set>
 
-
 using std::string;
-
 using std::unordered_set;
 
 namespace std {
@@ -25,17 +23,6 @@ namespace std {
 
 using MySet = std::unordered_set<std::vector<int>>;
 
-struct Node
-{
-	NCLBoard* board = nullptr;
-	Node* top = nullptr;
-	Node* bottom = nullptr;
-	Node* left = nullptr;
-	Node* right = nullptr;
-	Direction from = Null;
-
-};
-
 class NCLBoardTraverser
 {
 public:
@@ -43,12 +30,10 @@ public:
 	
 	ContinuousNumber GetTotalContinuousNumber() { return totalContinuousNumber; }
 private:
-	//Node* root = nullptr;
 	int size;
 	unordered_set<vector<char>> boardSet;
-	//vector<vector<int>> boardHistory;
-	//bool Search(const NCLBoard* board);
 	ContinuousNumber totalContinuousNumber;
+
 	ContinuousNumber Travers(NCLBoard *board, const bool& containSPACE);
 };
 

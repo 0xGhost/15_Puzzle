@@ -40,13 +40,14 @@ public:
 	NCLBoard(const NCLBoard& rhs) : Board(rhs) {}
 	virtual ~NCLBoard() {};
 	bool IsTurnEnd(); // check if this board is a turn end 
-	unsigned long GetTotalContinuousNumber(bool containSpace) const; // return continuous number (all are the same)
-	ContinuousNumber CheckContinuous(bool containSPACE); // check full continuous in all directions
-	ContinuousNumber CheckContinuous(int length); // check partial continuous in all directions
+	unsigned long GetTotalContinuousNumber(const bool& containSpace, const int& partial) const; // return continuous number (all are the same)
+	unsigned long GetTotalContinuousNumber(const bool& containSpace) const; // return continuous number (all are the same)
+	ContinuousNumber CheckContinuous(const bool& containSPACE) const; // check full continuous in all directions
+	ContinuousNumber CheckContinuous(const bool& containSPACE, const int& length); // check partial continuous in all directions
 	string ToString();
 	vector<char> ToVector();
 
 private:
-
+	bool CheckContinuousFromPoint(const bool& containSPACE, const int& length, const int& x, const int& y, const Direction& direction) const;
 };
 

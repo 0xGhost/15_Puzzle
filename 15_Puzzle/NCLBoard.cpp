@@ -17,26 +17,14 @@ inline unsigned long Factorial(int number)
 	return factorial;
 }
 
-unsigned long NCLBoard::GetTotalContinuousNumber(bool containSpace) const
+unsigned long NCLBoard::GetTotalContinuousNumber(const bool& containSpace, const int& partial) const
 {
 	unsigned long result = 0;
 	// sort (pre process)
 	int size = SIZE * SIZE - 1;
 	int* blocks = new int[size];
 	memcpy(blocks, this->blocks, size * sizeof(int));
-	for (int i = 1; i < size; i++)
-	{
-		for (int j = size - 1; j >= i; j--)
-		{
-			if (blocks[j] < blocks[j - 1])
-			{
-				int temp = blocks[j];
-				blocks[j] = blocks[j - 1];
-				blocks[j - 1] = temp;
-			}
-			
-		}
-	}
+	std::qsort(blocks, size, sizeof(int), [](const void* a, const void* b) -> int {return *(int*)a - *(int*)b; });
 	
 	// find all continuous parts in array blocks 
 	vector<int> lengthOfCP;
@@ -69,22 +57,25 @@ unsigned long NCLBoard::GetTotalContinuousNumber(bool containSpace) const
 		// contain SPACE: 
 		if (containSpace)
 		{
-			// possible continuous row configuration: n - (SIZE - 1) + 1
+			// possible continuous row configuration: n - (partial - 1) + 1
 			// reachable board configuration: (SIZE*SIZE - 3)! / 2
-			result += (n - SIZE + 2) * Factorial(size - 2) / 2;
+			result += (n - partial + 2) * Factorial(size - 2) / 2;
 		}
 		// not contain SPACE: 
-			//possible continuous row configuration: n - SIZE + 1
+			//possible continuous row configuration: n - partial + 1
 			// reachable board configuration: (SIZE*SIZE - 4)! / 2 * 2
-		result += (n - SIZE + 1) * Factorial(size - 3);
+		result += (n - partial + 1) * Factorial(size - 3);
 	}
 	return result;
 }
 
-ContinuousNumber NCLBoard::CheckContinuous(bool containSPACE)
+unsigned long NCLBoard::GetTotalContinuousNumber(const bool& containSpace) const
 {
-	// TODO: "water fall" algorithm
-	// idea: a board can not contain both continuous row and continuous column
+	return GetTotalContinuousNumber(containSpace, SIZE);
+}
+
+ContinuousNumber NCLBoard::CheckContinuous(const bool& containSPACE) const 
+{
 	/*brute force search*/
 	ContinuousNumber result;
 
@@ -163,6 +154,31 @@ ContinuousNumber NCLBoard::CheckContinuous(bool containSPACE)
 	return result;
 }
 
+ContinuousNumber NCLBoard::CheckContinuous(const bool& containSPACE, const int& length)
+{
+	ContinuousNumber result;
+
+	for (int j = 0; j < SIZE; j++)
+	{
+		for (int i = 0; i <= SIZE - length; i++)
+		{
+			result.row += CheckContinuousFromPoint(containSPACE, length, i, j, Direction::Right);
+			result.column += CheckContinuousFromPoint(containSPACE, length, j, i, Direction::Bottom);
+		}
+	}
+
+	for (int j = 0; j < SIZE; j++)
+	{
+		for (int i = SIZE - 1; i >= length - 1; i--)
+		{
+			result.rowReverse += CheckContinuousFromPoint(containSPACE, length, i, j, Direction::Left);
+			result.columnReverse += CheckContinuousFromPoint(containSPACE, length, j, i, Direction::Top);
+		}
+	}
+
+	return result;
+}
+
 string NCLBoard::ToString()
 {
 	string str;
@@ -184,4 +200,33 @@ vector<char> NCLBoard::ToVector()
 		vec.push_back(blocks[i] + '0');
 	}
 	return vec;
+}
+
+bool NCLBoard::CheckContinuousFromPoint(const bool& containSPACE, const int& length, const int& x, const int& y, const Direction& direction) const
+{
+	int result;
+	int moveX = (direction & 1) ? direction : 0;
+	int moveY = (direction & 1) ? 0 : direction >> 1;
+	int checkX = x;
+	int checkY = y;
+	int count = 1;
+
+	while (count < length)
+	{
+		if (blocks[IndexOf(checkX, checkY)] == SPACE && !containSPACE)
+			break;
+		if (blocks[IndexOf(checkX, checkY)] + 1 == blocks[IndexOf(checkX + moveX, checkY + moveY)]
+			|| blocks[IndexOf(checkX, checkY)] == SPACE 
+			|| blocks[IndexOf(checkX + moveX, checkY + moveY)] == SPACE)
+		{
+			checkX += moveX;
+			checkY += moveY;
+			count++;
+		}
+		else
+		{
+			return false;
+		}
+	} 
+	return true;
 }

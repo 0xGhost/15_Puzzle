@@ -11,6 +11,7 @@
 #include <string>
 #include <unordered_set>
 #include "NCLBoardTraverser.h"
+#include "NCLBoard.h"
 
 using namespace std;
 
@@ -100,21 +101,8 @@ inline void InputInteger(int& input, const int& min, const int& max)
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	} while (1);
+
 	input = inputNumber;
-	/*
-	cin >> inputNumber;
-	cin.clear();
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	while (cin.fail() || inputNumber < min || inputNumber > max)
-	{
-		std::cout << "Please enter a valid integer in Range (" << min << ", " << max << "): ";
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-	}*/
-
-
-	
 }
 
 inline int* inputBoardConfiguration(const int& length)
@@ -146,14 +134,14 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 #endif
-#if false
+#if true
 	{
 
 		int blocks4[] =
-		{ 1, 2, 3, 4,
-		5, 6, 7, 8,
-		9, 10, 11, 12,
-		13, 14, 15, -1 };
+		{ 1, 5, 14, 15,
+		2, 6, 13, 16,
+		3, 10, 12, 17,
+		4, 9, 11, -1 };
 
 		NCLBoard *board4 = new NCLBoard(4, blocks4);
 		cout << *board4 << endl;
@@ -178,6 +166,11 @@ int main()
 		
 		NCLBoard* board0 = board4;
 		cout << "Continuous = " << board0->GetTotalContinuousNumber(false) << endl;
+		ContinuousNumber con = board4->CheckContinuous(true, 4);
+		cout << "row = " << con.row << endl;
+		cout << "rowReverse = " << con.rowReverse << endl;
+		cout << "column = " << con.column << endl;
+		cout << "columnReverse = " << con.columnReverse << endl; 
 		/*
 		NCLBoardTraverser traverser(board0, true);
 		//traverser.Travers(board2);
@@ -209,13 +202,13 @@ int main()
 	vector<NCLBoard*> boards;
 	do
 	{
-		std::cout <<"\n0: exit the program"
+		std::cout << "\n0: exit the program"
 			<< "\n1: Manually type in a 15-puzzle configuration "
-			<< "\n2: Random create 15-Puzzle configurations  "
+			<< "\n2: Random create 15-Puzzle configurations "
 			<< "\n3: Produce 15-Puzzle file "
-			<< "\n4: Read 15-Puzzle file and output result on screen "
+			<< "\n4: Read 15-Puzzle file and output result on screen (this action will remove all puzzle stored in memory)"
 			<< "\n5: Output the Solution-File "
-			<< "\n6: Set if continuous contain space, now is: " << (containSpace?"contain":"not contain")
+			<< "\n6: Set if continuous contain space, now is: " << (containSpace ? "contain" : "not contain")
 			<< "\n7: Go Crazy!"
 			<< endl;
 		InputInteger(option, 0, 6);
@@ -235,11 +228,7 @@ int main()
 				NCLBoard *newBoard = new NCLBoard(size, inputArray);
 				boards.push_back(newBoard);
 				delete inputArray;
-				inputArray = nullptr;
-				// TODO: use a function to Make sure not to allow repeated numbers for the blocks 
-				// and maybe done the input and return *array
-				// create NCLBoard using this        -> ^^^
-						
+				inputArray = nullptr;						
 			}
 
 			break;
@@ -255,15 +244,32 @@ int main()
 		case 3:
 			if (boards.size() == 0)
 			{
-				std::cout << "There is no puzzle to write into file." << endl;
+				std::cout << "There is no puzzle in memory to write into the puzzle file." << endl;
 			}
 			else
 			{
-				WritePuzzleFile(boards, puzzleFileName);
+				try
+				{
+					WritePuzzleFile(boards, puzzleFileName);
+				}
+				catch (const invalid_argument& iae)
+				{
+					std::cout << " unable to write data : " << iae.what() << "\n";
+				}
 			}
 			break;
 		case 4:
-			ReadPuzzleFile(length, boards, puzzleFileName);
+			boards.clear();
+			results.clear();
+			try
+			{
+				ReadPuzzleFile(length, boards, puzzleFileName);
+			}
+			catch (const invalid_argument& iae)
+			{
+				std::cout << " unable to read data : " << iae.what() << "\n";
+			}
+			
 			for (int i = 0; i < boards.size(); i++)
 			{
 				unsigned long result = boards[i]->GetTotalContinuousNumber(containSpace);
@@ -276,7 +282,21 @@ int main()
 			}
 			break;
 		case 5:
-			WriteSolutionFile(boards, results, solutionFileName);
+			if (results.size() == 0)
+			{
+				std::cout << "There is no result in memory to write into the solution file." << endl;
+			}
+			else
+			{
+				try
+				{
+					WriteSolutionFile(boards, results, solutionFileName);
+				}
+				catch (const invalid_argument& iae)
+				{
+					std::cout << " unable to write data : " << iae.what() << "\n";
+				}
+			}
 			break;
 		case 6:
 			std::cout << " 0: not contain SPACE.    1: contain SPACE." << endl;
@@ -284,6 +304,7 @@ int main()
 			containSpace = inputNumber;
 		case 7:
 			// TODO: to another 'fun' to do 'fun' things! (if time avaliable)
+			
 			break;
 		default:
 			break;

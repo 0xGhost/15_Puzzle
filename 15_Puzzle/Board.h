@@ -2,9 +2,6 @@
 // Date created: 10/Oct/2019
 #pragma once
 #include "Comparable.h"
-#include <stdexcept>
-
-using std::invalid_argument;
 
 enum Direction
 {

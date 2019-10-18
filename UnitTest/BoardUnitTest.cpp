@@ -19,14 +19,6 @@ namespace UnitTest
 	TEST_CLASS(BoardUnitTest)
 	{
 	public:
-		/*
-		TEST_METHOD(TestMethod1)
-		{
-			std::istringstream iss("2 \n");
-			cin.rdbuf(iss.rdbuf());
-			
-		}
-		*/
 
 		int before[16] =
 		{ 1, 2, 3, 4,
