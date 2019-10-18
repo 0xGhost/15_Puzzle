@@ -66,6 +66,60 @@ namespace UnitTest
 			Assert::IsTrue(result0 == result1);
 		}
 
+		TEST_METHOD(CheckRowContinuousNoSpace)
+		{
+			int data[16] =
+			{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			9, 10, 17, 12,
+			13, 14, 15, -1 };
+
+			NCLBoard board1(4, data);
+			ContinuousNumber result0 = board1.CheckContinuous(false);
+			ContinuousNumber result1;
+			result1.column = 0;
+			result1.row = 2;
+			result1.columnReverse = 0;
+			result1.rowReverse = 0;
+			Assert::IsTrue(result0 == result1);
+		}
+
+		TEST_METHOD(CheckPartialRowContinuous)
+		{
+			int data[16] =
+			{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			9, 10, 17, 12,
+			13, 14, 15, -1 };
+
+			NCLBoard board1(4, data);
+			ContinuousNumber result0 = board1.CheckContinuous(true, 3);
+			ContinuousNumber result1;
+			result1.column = 0;
+			result1.row = 6;
+			result1.columnReverse = 0;
+			result1.rowReverse = 0;
+			Assert::IsTrue(result0 == result1);
+		}
+
+		TEST_METHOD(CheckPartialRowContinuousNoSpace)
+		{
+			int data[16] =
+			{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			9, 10, 17, 12,
+			13, 14, 15, -1 };
+
+			NCLBoard board1(4, data);
+			ContinuousNumber result0 = board1.CheckContinuous(false, 3);
+			ContinuousNumber result1;
+			result1.column = 0;
+			result1.row = 5;
+			result1.columnReverse = 0;
+			result1.rowReverse = 0;
+			Assert::IsTrue(result0 == result1);
+		}
+
 		TEST_METHOD(CheckRowReverseContinuous)
 		{
 			int data[16] =
@@ -85,6 +139,63 @@ namespace UnitTest
 
 		}
 
+		TEST_METHOD(CheckRowReverseContinuousNoSpace)
+		{
+			int data[16] =
+			{ 4, 3, 2, 1,
+			5, 6, 17, 8,
+			9, 10, 16, 12,
+			15, 14, 13, -1 };
+
+			NCLBoard board1(4, data);
+			ContinuousNumber result0 = board1.CheckContinuous(false);
+			ContinuousNumber result1;
+			result1.column = 0;
+			result1.row = 0;
+			result1.columnReverse = 0;
+			result1.rowReverse = 1;
+			Assert::IsTrue(result0 == result1);
+
+		}
+
+		TEST_METHOD(CheckPartialRowReverseContinuous)
+		{
+			int data[16] =
+			{ 4, 3, 2, 1,
+			5, 6, 17, 8,
+			9, 10, 16, 12,
+			15, 14, 13, -1 };
+
+			NCLBoard board1(4, data);
+			ContinuousNumber result0 = board1.CheckContinuous(true, 3);
+			ContinuousNumber result1;
+			result1.column = 0;
+			result1.row = 0;
+			result1.columnReverse = 0;
+			result1.rowReverse = 4;
+			Assert::IsTrue(result0 == result1);
+
+		}
+
+		TEST_METHOD(CheckPartialRowReverseContinuousNoSpace)
+		{
+			int data[16] =
+			{ 4, 3, 2, 1,
+			5, 6, 17, 8,
+			9, 10, 16, 12,
+			15, 14, 13, -1 };
+
+			NCLBoard board1(4, data);
+			ContinuousNumber result0 = board1.CheckContinuous(false, 3);
+			ContinuousNumber result1;
+			result1.column = 0;
+			result1.row = 0;
+			result1.columnReverse = 0;
+			result1.rowReverse = 3;
+			Assert::IsTrue(result0 == result1);
+
+		}
+
 		TEST_METHOD(CheckColumnContinuous)
 		{
 			int data[16] =
@@ -97,6 +208,63 @@ namespace UnitTest
 			ContinuousNumber result0 = board1.CheckContinuous(true);
 			ContinuousNumber result1;
 			result1.column = 2;
+			result1.row = 0;
+			result1.columnReverse = 0;
+			result1.rowReverse = 0;
+			Assert::IsTrue(result0 == result1);
+
+		}
+
+		TEST_METHOD(CheckColumnContinuousNoSpace)
+		{
+			int data[16] =
+			{ 1, 5, 9, 17,
+			2, 6, 7, 18,
+			3, 10, 20, 19,
+			4, 14, 15, -1 };
+
+			NCLBoard board1(4, data);
+			ContinuousNumber result0 = board1.CheckContinuous(false);
+			ContinuousNumber result1;
+			result1.column = 1;
+			result1.row = 0;
+			result1.columnReverse = 0;
+			result1.rowReverse = 0;
+			Assert::IsTrue(result0 == result1);
+
+		}
+
+		TEST_METHOD(CheckPartialColumnContinuous)
+		{
+			int data[16] =
+			{ 1, 5, 9, 17,
+			2, 6, 7, 18,
+			3, 10, 20, 19,
+			4, 14, 15, -1 };
+
+			NCLBoard board1(4, data);
+			ContinuousNumber result0 = board1.CheckContinuous(true, 3);
+			ContinuousNumber result1;
+			result1.column = 4;
+			result1.row = 1;
+			result1.columnReverse = 0;
+			result1.rowReverse = 0;
+			Assert::IsTrue(result0 == result1);
+
+		}
+
+		TEST_METHOD(CheckPartialColumnContinuousNoSpace)
+		{
+			int data[16] =
+			{ 1, 5, 9, 17,
+			2, 6, 7, 18,
+			3, 10, 20, 19,
+			4, 14, 15, -1 };
+
+			NCLBoard board1(4, data);
+			ContinuousNumber result0 = board1.CheckContinuous(false, 3);
+			ContinuousNumber result1;
+			result1.column = 3;
 			result1.row = 0;
 			result1.columnReverse = 0;
 			result1.rowReverse = 0;
@@ -218,7 +386,7 @@ namespace UnitTest
 
 		TEST_METHOD(TestGetTotalContinuousNumber1)
 		{
-			int load = 5;
+			int load = 2;
 			for (int i = 1; i < load; i++)
 			{
 				NCLBoard board1(3, 1, 8);
@@ -230,7 +398,7 @@ namespace UnitTest
 
 		TEST_METHOD(TestGetTotalContinuousNumber2)
 		{
-			int load = 5;
+			int load = 2;
 			for (int i = 1; i < load; i++)
 			{
 				NCLBoard board1(3, 1, 12);
@@ -242,7 +410,7 @@ namespace UnitTest
 
 		TEST_METHOD(TestGetTotalContinuousNumber3)
 		{
-			int load = 5;
+			int load = 2;
 			for (int i = 1; i < load; i++)
 			{
 				NCLBoard board1(3, 10, 30);

@@ -76,85 +76,10 @@ unsigned long NCLBoard::GetTotalContinuousNumber(const bool& containSpace) const
 
 ContinuousNumber NCLBoard::CheckContinuous(const bool& containSPACE) const 
 {
-	/*brute force search*/
-	ContinuousNumber result;
-
-	for (int j = 0; j < SIZE; j++)
-	{
-		if (j == SIZE - 1 && !containSPACE)
-		{
-			break;
-		}
-		result.row++;
-		for (int i = 0; i < SIZE - 1; i++)
-		{
-			if (blocks[IndexOf(i, j)] != blocks[IndexOf(i + 1, j)] - 1
-				&& blocks[IndexOf(i, j)] != SPACE && blocks[IndexOf(i + 1, j)] != SPACE)
-			{
-				result.row--;
-				break;
-			}
-		}
-	}
-
-	for (int j = 0; j < SIZE; j++)
-	{
-		if (j == SIZE - 1 && !containSPACE)
-		{
-			break;
-		}
-		result.rowReverse++;
-		for (int i = 0; i < SIZE - 1; i++)
-		{
-			if (blocks[IndexOf(i, j)] != blocks[IndexOf(i + 1, j)] + 1
-				&& blocks[IndexOf(i, j)] != SPACE && blocks[IndexOf(i + 1, j)] != SPACE)
-			{
-				result.rowReverse--;
-				break;
-			}
-		}
-	}
-
-	for (int i = 0; i < SIZE; i++)
-	{
-		if (i == SIZE - 1 && !containSPACE)
-		{
-			break;
-		}
-		result.column++;
-		for (int j = 0; j < SIZE - 1; j++)
-		{
-			if (blocks[IndexOf(i, j)] != blocks[IndexOf(i, j + 1)] - 1
-				&& blocks[IndexOf(i, j)] != SPACE && blocks[IndexOf(i, j + 1)] != SPACE)
-			{
-				result.column--;
-				break;
-			}
-		}
-	}
-
-	for (int i = 0; i < SIZE; i++)
-	{
-		if (i == SIZE - 1 && !containSPACE)
-		{
-			break;
-		}
-		result.columnReverse++;
-		for (int j = 0; j < SIZE - 1; j++)
-		{
-			if (blocks[IndexOf(i, j)] != blocks[IndexOf(i, j + 1)] + 1
-				&& blocks[IndexOf(i, j)] != SPACE && blocks[IndexOf(i, j + 1)] != SPACE)
-			{
-				result.columnReverse--;
-				break;
-			}
-		}
-	}
-
-	return result;
+	return CheckContinuous(containSPACE, SIZE);
 }
 
-ContinuousNumber NCLBoard::CheckContinuous(const bool& containSPACE, const int& length)
+ContinuousNumber NCLBoard::CheckContinuous(const bool& containSPACE, const int& length) const
 {
 	ContinuousNumber result;
 
@@ -213,8 +138,8 @@ bool NCLBoard::CheckContinuousFromPoint(const bool& containSPACE, const int& len
 
 	while (count < length)
 	{
-		if (blocks[IndexOf(checkX, checkY)] == SPACE && !containSPACE)
-			break;
+		if ((blocks[IndexOf(checkX, checkY)] == SPACE || blocks[IndexOf(checkX + moveX, checkY + moveY)] == SPACE) && !containSPACE)
+			return false;
 		if (blocks[IndexOf(checkX, checkY)] + 1 == blocks[IndexOf(checkX + moveX, checkY + moveY)]
 			|| blocks[IndexOf(checkX, checkY)] == SPACE 
 			|| blocks[IndexOf(checkX + moveX, checkY + moveY)] == SPACE)

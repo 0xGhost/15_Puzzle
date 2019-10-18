@@ -138,10 +138,10 @@ int main()
 	{
 
 		int blocks4[] =
-		{ 1, 5, 14, 15,
-		2, 6, 13, 16,
-		3, 10, 12, 17,
-		4, 9, 11, -1 };
+		{ 1, 5, 9, 17,
+			2, 6, 7, 18,
+			3, 10, 20, 19,
+			4, 14, 15, -1 };
 
 		NCLBoard *board4 = new NCLBoard(4, blocks4);
 		cout << *board4 << endl;
@@ -166,7 +166,7 @@ int main()
 		
 		NCLBoard* board0 = board4;
 		cout << "Continuous = " << board0->GetTotalContinuousNumber(false) << endl;
-		ContinuousNumber con = board4->CheckContinuous(true, 4);
+		ContinuousNumber con = board4->CheckContinuous(true, 3);
 		cout << "row = " << con.row << endl;
 		cout << "rowReverse = " << con.rowReverse << endl;
 		cout << "column = " << con.column << endl;
