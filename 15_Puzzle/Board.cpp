@@ -3,20 +3,12 @@
 #include "Board.h"
 #include <deque>
 #include <iomanip>
+#include "Utility.h"
 
 using std::deque;
 using std::invalid_argument;
 
-inline int GetNumberLength(int number)
-{
-	int length = 0;
-	while (number)
-	{
-		number /= 10;
-		length++;
-	}
-	return length;
-}
+
 
 Board::Board(const int& size = 4, const int& min = 1, const int& max = 20)
 	: SIZE(size), spaceX(size - 1), spaceY(size - 1), max(max)

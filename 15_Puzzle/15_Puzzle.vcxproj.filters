@@ -27,6 +27,9 @@
     <ClCompile Include="NCLBoardTraverser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BigPosInt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
@@ -39,6 +42,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Comparable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BigPosInt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

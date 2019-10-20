@@ -23,8 +23,6 @@ using namespace std;
 #endif
 
 
-
-
 inline void WritePuzzleFile(const vector<NCLBoard*>& boards, const string& fileName)
 {
 	ofstream fileOutput;
@@ -144,8 +142,8 @@ int main()
 			4, 14, 15, -1 };
 
 		NCLBoard *board4 = new NCLBoard(4, blocks4);
-		cout << *board4 << endl;
-		cout << board4->ToString() << endl;
+		//cout << *board4 << endl;
+		//cout << board4->ToString() << endl;
 		
 		//int blocks3[] =
 		//{ 1, 2, 3, 15,
@@ -154,17 +152,20 @@ int main()
 		{ 1, 2, 3, 4,
 		5, 6, -1, 8, 9 };
 		NCLBoard *board3 = new NCLBoard(3, blocks3);
-		cout << *board3 << endl;
-		cout << board3->ToString() << endl;
+		//cout << *board3 << endl;
+		//cout << board3->ToString() << endl;
 		
 		int blocks2[] =
 		{ 1, 2, 3, -1 };
 		NCLBoard *board2 = new NCLBoard(2, blocks2);
-		cout << *board2 << endl;
-		cout << board2->ToString() << endl;
+		//cout << *board2 << endl;
+		//cout << board2->ToString() << endl;
 		
+		unsigned long long int a;
+		sizeof(a);
 		
-		NCLBoard* board0 = board4;
+		NCLBoard* board0 = new NCLBoard(4, 1, 20);
+		cout << *board0 << endl;
 		cout << "Continuous = " << board0->GetTotalContinuousNumber(false) << endl;
 		ContinuousNumber con = board4->CheckContinuous(true, 3);
 		cout << "row = " << con.row << endl;
@@ -185,6 +186,7 @@ int main()
 		delete board4;
 		delete board3;
 		delete board2;
+		delete board0;
 	}
 	_CrtDumpMemoryLeaks();
 	return 0;
@@ -203,12 +205,12 @@ int main()
 	do
 	{
 		std::cout << "\n0: exit the program"
-			<< "\n1: Manually type in a 15-puzzle configuration "
-			<< "\n2: Random create 15-Puzzle configurations "
-			<< "\n3: Produce 15-Puzzle file "
+			<< "\n1: Manually type in a 15-puzzle configuration and store into memory"
+			<< "\n2: Random create 15-Puzzle configurations and store into memory"
+			<< "\n3: Output all 15-puzzle configuration from memory to a 15-Puzzle.txt file "
 			<< "\n4: Read 15-Puzzle file and output result on screen (this action will remove all puzzle stored in memory)"
-			<< "\n5: Output the Solution-File "
-			<< "\n6: Set if continuous contain space, now is: " << (containSpace ? "contain" : "not contain")
+			<< "\n5: Output the SolutionFile.txt  "
+			<< "\n6: Set if continuous blocks contain space, now is: " << (containSpace ? "contain" : "not contain")
 			<< "\n7: find partial continuous "
 			<< endl;
 		InputInteger(option, 0, 6);

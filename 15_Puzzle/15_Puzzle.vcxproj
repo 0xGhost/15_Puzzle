@@ -156,15 +156,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="15_Puzzle.cpp" />
+    <ClCompile Include="BigPosInt.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="NCLBoard.cpp" />
     <ClCompile Include="NCLBoardTraverser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BigPosInt.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Comparable.h" />
     <ClInclude Include="NCLBoard.h" />
     <ClInclude Include="NCLBoardTraverser.h" />
+    <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="15_Puzzle.txt" />

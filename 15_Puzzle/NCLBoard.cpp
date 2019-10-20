@@ -1,25 +1,16 @@
 // author: Yiang Lu
 // Date created: 13/Oct/2019
 #include "NCLBoard.h"
+#include "Utility.h"
 
 bool NCLBoard::IsTurnEnd()
 {
 	return (spaceX == (SIZE - 1) && spaceY == (SIZE - 1));
 }
 
-inline unsigned long Factorial(int number)
+unsigned long long NCLBoard::GetTotalContinuousNumber(const bool& containSpace, const int& partial) const
 {
-	unsigned long  factorial = 1;
-	for (int i = 2; i <= number; ++i)
-	{
-		factorial *= i;
-	}
-	return factorial;
-}
-
-unsigned long NCLBoard::GetTotalContinuousNumber(const bool& containSpace, const int& partial) const
-{
-	unsigned long result = 0;
+	unsigned long long result = 0;
 	// sort (pre process)
 	int size = SIZE * SIZE - 1;
 	int* blocks = new int[size];
@@ -59,17 +50,23 @@ unsigned long NCLBoard::GetTotalContinuousNumber(const bool& containSpace, const
 		{
 			// possible continuous row configuration: n - (partial - 1) + 1
 			// reachable board configuration: (SIZE*SIZE - 3)! / 2
-			result += (n - partial + 2) * Factorial(size - 2) / 2;
+			if ((n - partial + 2) > 0)
+				result +=  Factorial(3, size - 2) * (n - partial + 2);
 		}
+		std::cout << n << std::endl;
+		std::cout << result << std::endl;
 		// not contain SPACE: 
 			//possible continuous row configuration: n - partial + 1
-			// reachable board configuration: (SIZE*SIZE - 4)! / 2 * 2
-		result += (n - partial + 1) * Factorial(size - 3);
+			// reachable board configuration: (SIZE*SIZE - 4)! / 2 * (SIZE - 1)
+
+		if ((n - partial + 1) > 0)
+			result +=  Factorial(3, size - 3) * (n - partial + 1) * (SIZE - 1);
+		std::cout << result << std::endl << std::endl;
 	}
 	return result;
 }
 
-unsigned long NCLBoard::GetTotalContinuousNumber(const bool& containSpace) const
+unsigned long long NCLBoard::GetTotalContinuousNumber(const bool& containSpace) const
 {
 	return GetTotalContinuousNumber(containSpace, SIZE);
 }
