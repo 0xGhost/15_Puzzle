@@ -14,6 +14,7 @@
 #include "NCLBoard.h"
 
 using namespace std;
+using std::cout;
 
 #define MEMORY_LEAK_CHECK true
 
@@ -66,7 +67,7 @@ inline void ReadPuzzleFile(const int& length, vector<NCLBoard*>& boards, const s
 	fileInput.close();
 }
 
-inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const vector<unsigned long>& results, const string& fileName) throw (invalid_argument)
+inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const vector<BigPosInt>& results, const string& fileName) throw (invalid_argument)
 {
 	ofstream fileOutput;
 	int numberOfPuzzles = boards.size();
@@ -136,10 +137,10 @@ int main()
 	{
 
 		int blocks4[] =
-		{ 1, 5, 9, 17,
-			2, 6, 7, 18,
-			3, 10, 20, 19,
-			4, 14, 15, -1 };
+		{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			9, 10, 11, 12 ,
+			13, 14, 15, -1 };
 
 		NCLBoard *board4 = new NCLBoard(4, blocks4);
 		//cout << *board4 << endl;
@@ -161,10 +162,8 @@ int main()
 		//cout << *board2 << endl;
 		//cout << board2->ToString() << endl;
 		
-		unsigned long long int a;
-		sizeof(a);
-		
-		NCLBoard* board0 = new NCLBoard(4, 1, 20);
+
+		NCLBoard* board0 = board4;// = new NCLBoard(100, 1, 12000);
 		cout << *board0 << endl;
 		cout << "Continuous = " << board0->GetTotalContinuousNumber(false) << endl;
 		ContinuousNumber con = board4->CheckContinuous(true, 3);
@@ -186,7 +185,7 @@ int main()
 		delete board4;
 		delete board3;
 		delete board2;
-		delete board0;
+		//delete board0;
 	}
 	_CrtDumpMemoryLeaks();
 	return 0;
@@ -200,8 +199,10 @@ int main()
 	
 	string puzzleFileName = "15_Puzzle.txt";
 	string solutionFileName = "SolutionFile.txt";
-	vector<unsigned long> results;
+	vector<BigPosInt> results;
 	vector<NCLBoard*> boards;
+
+
 	do
 	{
 		std::cout << "\n0: exit the program"
@@ -274,7 +275,7 @@ int main()
 			
 			for (int i = 0; i < boards.size(); i++)
 			{
-				unsigned long result = boards[i]->GetTotalContinuousNumber(containSpace);
+				BigPosInt result = boards[i]->GetTotalContinuousNumber(containSpace);
 				std::cout << *boards[i];
 				std::cout << "row = " << result << endl;
 				std::cout << "column = " << result << endl;

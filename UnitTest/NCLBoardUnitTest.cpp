@@ -392,7 +392,8 @@ namespace UnitTest
 				NCLBoard board1(3, 1, 8);
 				NCLBoardTraverser t(&board1, true);
 				ContinuousNumber c = t.GetTotalContinuousNumber();
-				Assert::AreEqual(board1.GetTotalContinuousNumber(true), (unsigned long long)c.row);
+				BigPosInt b = c.row;
+				Assert::IsTrue(board1.GetTotalContinuousNumber(true) == b);
 			}
 		}
 
@@ -404,7 +405,8 @@ namespace UnitTest
 				NCLBoard board1(3, 1, 12);
 				NCLBoardTraverser t(&board1, true);
 				ContinuousNumber c = t.GetTotalContinuousNumber();
-				Assert::AreEqual(board1.GetTotalContinuousNumber(true), (unsigned long long)c.row);
+				BigPosInt b = c.row;
+				Assert::IsTrue(board1.GetTotalContinuousNumber(true) == b);
 			}
 		}
 
@@ -416,7 +418,8 @@ namespace UnitTest
 				NCLBoard board1(3, 10, 30);
 				NCLBoardTraverser t(&board1, true);
 				ContinuousNumber c = t.GetTotalContinuousNumber();
-				Assert::AreEqual(board1.GetTotalContinuousNumber(true), (unsigned long long)c.row);
+				BigPosInt b = c.row;
+				Assert::IsTrue(board1.GetTotalContinuousNumber(true) == b);
 			}
 		}
 	};

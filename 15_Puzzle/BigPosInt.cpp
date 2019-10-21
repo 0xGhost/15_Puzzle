@@ -2,10 +2,11 @@
 // Date created: 20/Oct/2019
 #include "BigPosInt.h"
 #include <iomanip>
+#include "Utility.h"
 
 #define max(a,b) a>b?a:b
 
-BigPosInt::BigPosInt(size_t value)
+BigPosInt::BigPosInt(util::size_t value)
 {
 	*this = value;
 }
@@ -15,7 +16,7 @@ BigPosInt::BigPosInt(const BigPosInt& value)
 	*this = value;
 }
 
-void BigPosInt::operator=(size_t num)
+void BigPosInt::operator=(util::size_t num)
 {
 	while (num > 0)
 	{
@@ -50,22 +51,54 @@ void BigPosInt::operator+=(const BigPosInt& rhs)
 	*this = *this + rhs;
 }
 
-BigPosInt BigPosInt::operator*(int num) const
+BigPosInt BigPosInt::operator*(unsigned int num) const
 {
 	BigPosInt result = *this;
-	for (int i = 0, carry = 0; i < result.number.size() || carry; i++)
+	for (util::size_t i = 0, carry = 0; i < result.number.size() || carry; i++)
 	{
 		if (i == (int)result.number.size())
 			result.number.push_back(0);
-		size_t current = result.number[i] * (size_t)num + carry;
-		carry = (size_t)(current / base);
-		result.number[i] = (size_t)(current % base);
+		util::size_t current = result.number[i] * (util::size_t)num + carry;
+		carry = (util::size_t)(current / base);
+		result.number[i] = (util::size_t)(current % base);
 		//asm("divl %%ecx" : "=a"(carry), "=d"(a[i]) : "A"(cur), "c"(base));
 	}
+	while (!result.number.empty() && !result.number.back())
+		result.number.pop_back();
 	//trim();
 	return result;
 }
 
+void BigPosInt::operator*=(unsigned int num)
+{
+	for (util::size_t i = 0, carry = 0; i < number.size() || carry; i++)
+	{
+		if (i == number.size())
+			number.push_back(0);
+		util::size_t current = number[i] * (util::size_t)num + carry;
+		carry = (util::size_t)(current / base);
+		number[i] = (util::size_t)(current % base);
+		//asm("divl %%ecx" : "=a"(carry), "=d"(a[i]) : "A"(cur), "c"(base));
+	}
+	while (!number.empty() && !number.back())
+		number.pop_back();
+	//trim();
+
+}
+
+bool BigPosInt::operator==(const BigPosInt& num) const
+{
+	if (num.number.size() != number.size())
+		return false;
+	for (unsigned int i = 0; i < number.size(); i++)
+	{
+		if (number[i] != num.number[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
 std::ostream& operator<<(std::ostream& ostr, const BigPosInt& num)
 {

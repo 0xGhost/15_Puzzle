@@ -7,7 +7,7 @@
 
 using std::deque;
 using std::invalid_argument;
-
+using util::GetNumberLength;
 
 
 Board::Board(const int& size = 4, const int& min = 1, const int& max = 20)

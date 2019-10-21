@@ -2,15 +2,26 @@
 // Date created: 13/Oct/2019
 #include "NCLBoard.h"
 #include "Utility.h"
+#include "BigPosInt.h"
+
+inline BigPosInt Factorial(size_t start, size_t end)
+{
+	BigPosInt factorial = 1;
+	for (size_t i = start; i <= end; ++i)
+	{
+		factorial *= i;
+	}
+	return factorial;
+}
 
 bool NCLBoard::IsTurnEnd()
 {
 	return (spaceX == (SIZE - 1) && spaceY == (SIZE - 1));
 }
 
-unsigned long long NCLBoard::GetTotalContinuousNumber(const bool& containSpace, const int& partial) const
+BigPosInt NCLBoard::GetTotalContinuousNumber(const bool& containSpace, const int& partial) const
 {
-	unsigned long long result = 0;
+	BigPosInt result = 0;
 	// sort (pre process)
 	int size = SIZE * SIZE - 1;
 	int* blocks = new int[size];
@@ -53,20 +64,16 @@ unsigned long long NCLBoard::GetTotalContinuousNumber(const bool& containSpace, 
 			if ((n - partial + 2) > 0)
 				result +=  Factorial(3, size - 2) * (n - partial + 2);
 		}
-		std::cout << n << std::endl;
-		std::cout << result << std::endl;
 		// not contain SPACE: 
 			//possible continuous row configuration: n - partial + 1
 			// reachable board configuration: (SIZE*SIZE - 4)! / 2 * (SIZE - 1)
-
 		if ((n - partial + 1) > 0)
 			result +=  Factorial(3, size - 3) * (n - partial + 1) * (SIZE - 1);
-		std::cout << result << std::endl << std::endl;
 	}
 	return result;
 }
 
-unsigned long long NCLBoard::GetTotalContinuousNumber(const bool& containSpace) const
+BigPosInt NCLBoard::GetTotalContinuousNumber(const bool& containSpace) const
 {
 	return GetTotalContinuousNumber(containSpace, SIZE);
 }

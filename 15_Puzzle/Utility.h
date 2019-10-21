@@ -1,22 +1,18 @@
 #pragma once
-
-inline int GetNumberLength(size_t number)
+//#include "BigPosInt.h"
+class BigPosInt;
+namespace util
 {
-	int length = 0;
-	while (number)
-	{
-		number /= 10;
-		length++;
-	}
-	return length;
-}
+	typedef unsigned long long size_t;
 
-inline unsigned long long Factorial(int start, int end)
-{
-	unsigned long long factorial = 1;
-	for (int i = start; i <= end; ++i)
+	inline int GetNumberLength(size_t number)
 	{
-		factorial *= i;
+		int length = 0;
+		while (number)
+		{
+			number /= 10;
+			length++;
+		}
+		return length;
 	}
-	return factorial;
 }

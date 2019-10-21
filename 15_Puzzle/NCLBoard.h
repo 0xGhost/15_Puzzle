@@ -2,6 +2,7 @@
 // Date created: 13/Oct/2019
 #pragma once
 #include "Board.h"
+#include "BigPosInt.h"
 #include <string>
 #include <vector>
 
@@ -40,8 +41,8 @@ public:
 	NCLBoard(const NCLBoard& rhs) : Board(rhs) {}
 	virtual ~NCLBoard() {};
 	bool IsTurnEnd(); // check if this board is a turn end 
-	unsigned long long GetTotalContinuousNumber(const bool& containSpace, const int& partial) const; // return continuous number (all are the same)
-	unsigned long long GetTotalContinuousNumber(const bool& containSpace) const; // return continuous number (all are the same)
+	BigPosInt GetTotalContinuousNumber(const bool& containSpace, const int& partial) const; // return continuous number (all are the same)
+	BigPosInt GetTotalContinuousNumber(const bool& containSpace) const; // return continuous number (all are the same)
 	ContinuousNumber CheckContinuous(const bool& containSPACE) const; // check full continuous in all directions
 	ContinuousNumber CheckContinuous(const bool& containSPACE, const int& length) const; // check partial continuous in all directions
 	string ToString();

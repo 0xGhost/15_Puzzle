@@ -138,6 +138,47 @@ namespace UnitTest
 			Assert::AreEqual(str1, str2);
 		}
 
+		TEST_METHOD(MultiplyTest1)
+		{
+			stringstream ss;
+			BigPosInt a = 18446744073709551615;
+			unsigned int b = 2;
+
+			a = a * b;
+			string str1 = "36893488147419103230";
+			string str2;
+			ss << a;
+			ss >> str2;
+			Assert::AreEqual(str1, str2);
+		}
+
+		TEST_METHOD(MultiplyTest2)
+		{
+			stringstream ss;
+			BigPosInt a = 18446744073709551615;
+			unsigned int b = 2000000;
+
+			a = a * b;
+			string str1 = "36893488147419103230000000";
+			string str2;
+			ss << a;
+			ss >> str2;
+			Assert::AreEqual(str1, str2);
+		}
+
+		TEST_METHOD(MultiplyTest3)
+		{
+			stringstream ss;
+			BigPosInt a = 18446744073709551615;
+			unsigned int b = 20;
+
+			a = a * b;
+			string str1 = "368934881474191032300";
+			string str2;
+			ss << a;
+			ss >> str2;
+			Assert::AreEqual(str1, str2);
+		}
 
 	};
 }
