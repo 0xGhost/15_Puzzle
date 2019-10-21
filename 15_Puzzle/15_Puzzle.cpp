@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <unordered_set>
 #include "NCLBoardTraverser.h"
 #include "NCLBoard.h"
@@ -53,13 +54,31 @@ inline void ReadPuzzleFile(const int& length, vector<NCLBoard*>& boards, const s
 	fileInput >> numberOfPuzzles;
 	for (int j = 0; j < numberOfPuzzles; j++)
 	{
+		string firstRow;
+		getline(fileInput, firstRow);
+		stringstream ss;
+		ss << firstRow;
+		vector<int> firstRowBlocks;
+		while (!ss.eof())
+		{
+			int a;
+			ss >> a;
+			firstRowBlocks.push_back(a);
+		}
+		int size = firstRowBlocks.size();
+		int length = size * size - 1;
 		int *inputArray = new int[length + 1];
-		for (int i = 0; i < length; i++)
+		
+		for (int i = 0; i < size; i++)
+		{
+			inputArray[i] = firstRowBlocks[i];
+		}
+		for (int i = size; i < length; i++)
 		{
 			fileInput >> inputArray[i];
 		}
 		inputArray[length] = -1;
-		boards.push_back(new NCLBoard(4, inputArray));
+		boards.push_back(new NCLBoard(size, inputArray));
 		delete[] inputArray;
 		inputArray = nullptr;
 	}
