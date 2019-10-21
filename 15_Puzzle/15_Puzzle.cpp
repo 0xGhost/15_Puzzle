@@ -2,6 +2,13 @@
 // Author: Yiang Lu
 // Date created: 11/Oct/2019
 
+#define MEMORY_LEAK_CHECK true
+
+#if MEMORY_LEAK_CHECK
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#endif
+
 #include <iostream>
 #include <limits>
 #include <stdlib.h>
@@ -17,12 +24,7 @@
 using namespace std;
 using std::cout;
 
-#define MEMORY_LEAK_CHECK true
 
-#if MEMORY_LEAK_CHECK
-	#define _CRTDBG_MAP_ALLOC
-	#include <crtdbg.h>
-#endif
 
 
 inline void WritePuzzleFile(const vector<NCLBoard*>& boards, const string& fileName)
@@ -240,10 +242,7 @@ int main()
 	
 	string puzzleFileName = "15_Puzzle.txt";
 	string solutionFileName = "SolutionFile.txt";
-	vector<BigPosInt> results;
 	vector<NCLBoard*> boards;
-
-
 	do
 	{
 		std::cout << "\nThere are " << boards.size() << " puzzle(s) stored in the memory"
@@ -319,8 +318,6 @@ int main()
 			}
 			break;
 		case 4:
-			boards.clear();
-			results.clear();
 			try
 			{
 				ReadPuzzleFile(boards, puzzleFileName);
@@ -357,6 +354,11 @@ int main()
 			InputInteger(inputNumber, 0, 1);
 			containSpace = inputNumber;
 		case 7:
+			for (NCLBoard* board : boards)
+			{
+				delete board;
+				board = nullptr;
+			}
 			boards.clear();
 			break;
 		case 8:
@@ -396,10 +398,5 @@ int main()
 		delete board;
 		board = nullptr;
 	}
-
-#if MEMORY_LEAK_CHECK
-	_CrtDumpMemoryLeaks();
-#endif
-
 	return 0;
 }
