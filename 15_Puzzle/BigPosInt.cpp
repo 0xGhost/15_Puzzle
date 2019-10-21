@@ -50,6 +50,22 @@ void BigPosInt::operator+=(const BigPosInt& rhs)
 	*this = *this + rhs;
 }
 
+BigPosInt BigPosInt::operator*(int num) const
+{
+	BigPosInt result = *this;
+	for (int i = 0, carry = 0; i < result.number.size() || carry; i++)
+	{
+		if (i == (int)result.number.size())
+			result.number.push_back(0);
+		size_t current = result.number[i] * (size_t)num + carry;
+		carry = (size_t)(current / base);
+		result.number[i] = (size_t)(current % base);
+		//asm("divl %%ecx" : "=a"(carry), "=d"(a[i]) : "A"(cur), "c"(base));
+	}
+	//trim();
+	return result;
+}
+
 
 std::ostream& operator<<(std::ostream& ostr, const BigPosInt& num)
 {

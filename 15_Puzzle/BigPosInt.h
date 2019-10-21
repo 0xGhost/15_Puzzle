@@ -20,6 +20,7 @@ public:
 	virtual void operator= (const BigPosInt& num);
 	virtual BigPosInt operator+(const BigPosInt& rhs) const;
 	virtual void operator+=(const BigPosInt& rhs);
+	virtual BigPosInt operator*(int num) const;
 
 	friend std::ostream& operator<<(std::ostream& ostr, const BigPosInt& num);
 
