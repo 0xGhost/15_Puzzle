@@ -26,7 +26,7 @@ Board::Board(const int& size, int* input)
 	{
 		for (int i = 0; i < SIZE * SIZE; i++)
 		{
-			max = input[i] > max ? input[i] : max;
+			
 			if (input[i] == SPACE)
 			{
 				spaceX = i % SIZE;
@@ -34,6 +34,8 @@ Board::Board(const int& size, int* input)
 			}
 		}
 	}
+	for(int i = 0; i < SIZE * SIZE; i++)
+		max = input[i] > max ? input[i] : max;
 	numberMaxLength = GetNumberLength(max);
 }
 
@@ -159,13 +161,12 @@ int Board::IndexOf(const int& x, const int& y) const
 
 std::ostream& Board::print(std::ostream& ostr, const Comparable& comparable) const
 {
-	ostr << std::endl;
 	for (int i = 0; i < SIZE; i++)
 	{
 		for (int j = 0; j < SIZE; j++)
 		{
 			int block = ((Board*)& comparable)->blocks[IndexOf(j, i)];
-			ostr << std::setw((long long)numberMaxLength + 2);
+			ostr << std::left << std::setw((long long)numberMaxLength + 2) << std::setfill(' ');
 			
 			if (block == SPACE)
 				ostr << ' ';
@@ -175,6 +176,5 @@ std::ostream& Board::print(std::ostream& ostr, const Comparable& comparable) con
 		}
 		ostr << std::endl;
 	}
-	ostr << std::endl;
 	return ostr;
 }

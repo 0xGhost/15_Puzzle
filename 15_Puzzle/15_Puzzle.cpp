@@ -33,16 +33,16 @@ inline void WritePuzzleFile(const vector<NCLBoard*>& boards, const string& fileN
 
 	if(fileOutput.fail())
 		throw invalid_argument("Fail to write the file \"" + fileName + "\".");
-	fileOutput << numberOfPuzzles;
+	fileOutput << numberOfPuzzles << endl;
 	for (int j = 0; j < numberOfPuzzles; j++)
 	{
-		fileOutput << *(boards[j]);
+		fileOutput << *(boards[j]) << endl;
 	}
 	fileOutput.close();
 }
 
 // length: length of each puzzle 
-inline void ReadPuzzleFile(const int& length, vector<NCLBoard*>& boards, const string& fileName) throw (invalid_argument)
+inline void ReadPuzzleFile(vector<NCLBoard*>& boards, const string& fileName) throw (invalid_argument)
 {
 	ifstream fileInput;
 	int numberOfPuzzles;
@@ -54,18 +54,22 @@ inline void ReadPuzzleFile(const int& length, vector<NCLBoard*>& boards, const s
 	fileInput >> numberOfPuzzles;
 	for (int j = 0; j < numberOfPuzzles; j++)
 	{
+		int size = 0;
 		string firstRow;
-		getline(fileInput, firstRow);
-		stringstream ss;
-		ss << firstRow;
 		vector<int> firstRowBlocks;
-		while (!ss.eof())
+		while (size < 3)
 		{
-			int a;
-			ss >> a;
-			firstRowBlocks.push_back(a);
+			firstRowBlocks.clear();
+			getline(fileInput, firstRow);
+			stringstream ss;
+			ss << firstRow;
+			int block;
+			while (ss >> block)
+			{
+				firstRowBlocks.push_back(block);
+			}
+			size = firstRowBlocks.size();
 		}
-		int size = firstRowBlocks.size();
 		int length = size * size - 1;
 		int *inputArray = new int[length + 1];
 		
@@ -86,7 +90,7 @@ inline void ReadPuzzleFile(const int& length, vector<NCLBoard*>& boards, const s
 	fileInput.close();
 }
 
-inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const vector<BigPosInt>& results, const string& fileName) throw (invalid_argument)
+inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const bool& containSpace, const string& fileName) throw (invalid_argument)
 {
 	ofstream fileOutput;
 	int numberOfPuzzles = boards.size();
@@ -97,11 +101,27 @@ inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const vector<BigP
 	fileOutput << numberOfPuzzles;
 	for (int j = 0; j < numberOfPuzzles; j++)
 	{
-		fileOutput << *(boards[j]);
-		fileOutput << "row = " << results[j] << endl;
-		fileOutput << "column = " << results[j] << endl;
-		fileOutput << "reverse row = " << results[j] << endl;
-		fileOutput << "reverse column = " << results[j] << endl;
+		fileOutput << "\n" << *(boards[j]);
+		int size = boards[j]->SIZE;
+		BigPosInt result = boards[j]->GetTotalContinuousNumber(containSpace, size);
+		fileOutput << "row = " << result << endl;
+		fileOutput << "column = " << result << endl;
+		fileOutput << "reverse row = " << result << endl;
+		fileOutput << "reverse column = " << result << endl;
+		fileOutput << "(total for row & column, including reverse, in this configuration)" << endl;
+		for (int i = 2; i <= size; i++)
+		{
+			ContinuousNumber cResult = boards[j]->CheckContinuous(containSpace, i);
+			unsigned long long outputResult = cResult.row + cResult.column + cResult.rowReverse + cResult.columnReverse;
+			fileOutput << i << " = " << outputResult << endl;
+		}
+		fileOutput << "(total for row & column, including reverse, for all valid turns)" << endl;
+		for (int i = 2; i <= size; i++)
+		{
+			BigPosInt result = boards[j]->GetTotalContinuousNumber(containSpace, i);
+			result *= 4;
+			fileOutput << i << " = " << result << endl;
+		}
 	}
 	fileOutput.close();
 }
@@ -152,7 +172,7 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 #endif
-#if true
+#if false
 	{
 
 		int blocks4[] =
@@ -162,7 +182,9 @@ int main()
 			13, 14, 15, -1 };
 
 		NCLBoard *board4 = new NCLBoard(4, blocks4);
-		//cout << *board4 << endl;
+		cout << *board4 << endl;
+		NCLBoard boardr(4, 1, 20);
+		cout << boardr << endl;
 		//cout << board4->ToString() << endl;
 		
 		//int blocks3[] =
@@ -210,8 +232,8 @@ int main()
 	return 0;
 #endif	
 
-	int size = 4; // puzzle size
-	int length = size * size - 1; // number of the puzzle blocks
+	const int MAX_SIZE = 10;
+
 	int option;
 	bool exitFlag = false;
 	bool containSpace = true;
@@ -224,16 +246,19 @@ int main()
 
 	do
 	{
-		std::cout << "\n0: exit the program"
+		std::cout << "\nThere are " << boards.size() << " puzzle(s) stored in the memory"
+			<< "\n0: Exit the program"
 			<< "\n1: Manually type in a 15-puzzle configuration and store into memory"
 			<< "\n2: Random create 15-Puzzle configurations and store into memory"
-			<< "\n3: Output all 15-puzzle configuration from memory to a 15-Puzzle.txt file "
-			<< "\n4: Read 15-Puzzle file and output result on screen (this action will remove all puzzle stored in memory)"
-			<< "\n5: Output the SolutionFile.txt  "
+			<< "\n3: Write all 15-puzzle configuration from memory to a 15-Puzzle.txt file "
+			<< "\n4: Read 15-Puzzle file (this action will remove all puzzles stored in memory)"
+			<< "\n5: Write the SolutionFile.txt  "
 			<< "\n6: Set if continuous blocks contain space, now is: " << (containSpace ? "contain" : "not contain")
-			<< "\n7: find partial continuous "
+			<< "\n7: Clear the puzzles that stored in the memory"
+			<< "\n8: Find partial(full) continuous column/row (including reverse) for puzzles in the memory "
+			<< "\n9: Find total partial(full) continuous column/row (including reverse) in all valid reachable \"turns\" for puzzles in the memory"
 			<< endl;
-		InputInteger(option, 0, 6);
+		InputInteger(option, 0, 9);
 		
 		int inputNumber;
 
@@ -245,6 +270,10 @@ int main()
 			break;
 		case 1:
 			{
+				int size;
+				std::cout << "Enter the size of the puzzle(eg: 4 for a 15-puzzle): ";
+				InputInteger(size, 3, MAX_SIZE);
+				int length = size * size - 1;
 				std::cout << "Enter " << length <<" positive integers: ";
 				int* inputArray = inputBoardConfiguration(length);
 				NCLBoard *newBoard = new NCLBoard(size, inputArray);
@@ -252,15 +281,23 @@ int main()
 				delete inputArray;
 				inputArray = nullptr;						
 			}
-
 			break;
 		case 2:
-			std::cout << "How many board configurations? Enter a positive integer: ";
+			int size, min, max;
+			std::cout << "Enter the size of random generated puzzles(eg: 4 for a 15-puzzle): ";
+			InputInteger(size, 3, MAX_SIZE);
+			std::cout << "How many puzzle do you want to generate? Enter a positive integer: ";
 			InputInteger(inputNumber, 1, INT_MAX);
+			std::cout << "Enter the minimum integer for the random generation:";
+			InputInteger(min, 1, INT_MAX - (size * size));
+			std::cout << "Enter the maximum integer for the random generation:";
+			InputInteger(max, min + (size * size) - 2, INT_MAX);
+
 			for (int i = 0; i < inputNumber; i++)
 			{
-				NCLBoard *newBoard = new NCLBoard(size, 1, 20);
+				NCLBoard *newBoard = new NCLBoard(size, min, max);
 				boards.push_back(newBoard);
+				std::cout << "\n" << *newBoard;
 			}
 			break;
 		case 3:
@@ -273,10 +310,11 @@ int main()
 				try
 				{
 					WritePuzzleFile(boards, puzzleFileName);
+					std::cout << "Puzzle file write successful." << endl;
 				}
 				catch (const invalid_argument& iae)
 				{
-					std::cout << " unable to write data : " << iae.what() << "\n";
+					std::cout << "Unable to write data : " << iae.what() << endl;
 				}
 			}
 			break;
@@ -285,38 +323,32 @@ int main()
 			results.clear();
 			try
 			{
-				ReadPuzzleFile(length, boards, puzzleFileName);
+				ReadPuzzleFile(boards, puzzleFileName);
 			}
 			catch (const invalid_argument& iae)
 			{
-				std::cout << " unable to read data : " << iae.what() << "\n";
+				std::cout << "Unable to read data : " << iae.what() << endl;
 			}
-			
 			for (int i = 0; i < boards.size(); i++)
 			{
-				BigPosInt result = boards[i]->GetTotalContinuousNumber(containSpace);
-				std::cout << *boards[i];
-				std::cout << "row = " << result << endl;
-				std::cout << "column = " << result << endl;
-				std::cout << "reverse row = " << result << endl;
-				std::cout << "reverse column = " << result << endl;
-				results.push_back(result);
+				std::cout << "\n" << *boards[i];
 			}
 			break;
 		case 5:
-			if (results.size() == 0)
+			if (boards.size() == 0)
 			{
-				std::cout << "There is no result in memory to write into the solution file." << endl;
+				std::cout << "There is no puzzle in memory to write into the solution file." << endl;
 			}
 			else
 			{
 				try
 				{
-					WriteSolutionFile(boards, results, solutionFileName);
+					WriteSolutionFile(boards, containSpace, solutionFileName);
+					std::cout << "Solution file write successful." << endl;
 				}
 				catch (const invalid_argument& iae)
 				{
-					std::cout << " unable to write data : " << iae.what() << "\n";
+					std::cout << "Unable to write data : " << iae.what() << "\n";
 				}
 			}
 			break;
@@ -325,8 +357,33 @@ int main()
 			InputInteger(inputNumber, 0, 1);
 			containSpace = inputNumber;
 		case 7:
-			// TODO: to another 'fun' to do 'fun' things! (if time avaliable)
-			
+			boards.clear();
+			break;
+		case 8:
+			cout << "How many digits for partial continuous (enter an integer N to find N-partial):" << endl;
+			InputInteger(inputNumber, 2, MAX_SIZE);
+			for (int i = 0; i < boards.size(); i++)
+			{
+				ContinuousNumber con = boards[i]->CheckContinuous(containSpace, inputNumber);
+				cout << "\n" << *boards[i];
+				cout << "row = " << con.row << endl;
+				cout << "rowReverse = " << con.rowReverse << endl;
+				cout << "column = " << con.column << endl;
+				cout << "columnReverse = " << con.columnReverse << endl;
+			}
+			break;
+		case 9:
+			cout << "How many digits for partial continuous (enter an integer N to find N-partial):" << endl;
+			InputInteger(inputNumber, 2, MAX_SIZE);
+			for (int i = 0; i < boards.size(); i++)
+			{
+				BigPosInt result = boards[i]->GetTotalContinuousNumber(containSpace, inputNumber);
+				cout << "\n" << *boards[i];
+				cout << "row = " << result << endl;
+				cout << "rowReverse = " << result << endl;
+				cout << "column = " << result << endl;
+				cout << "columnReverse = " << result << endl;
+			}
 			break;
 		default:
 			break;

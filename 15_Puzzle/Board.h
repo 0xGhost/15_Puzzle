@@ -16,7 +16,7 @@ class Board :
 	public Comparable
 {
 public:
-	const int SIZE; // size of the board
+	const int SIZE; // size of the board eg: SIZE = 4 means 15-puzzle
 
 	Board(const int& size, const int& min, const int& max); // random generate a puzzle board
 	Board(const int& size, int* input); // input a board using an array
