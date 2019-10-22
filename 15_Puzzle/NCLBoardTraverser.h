@@ -8,6 +8,7 @@ using std::string;
 using std::unordered_set;
 
 namespace std {
+	// customize hash function for a vector<char>
 	template <>
 	struct hash<std::vector<char>> {
 		size_t operator()(const vector<char>& v) const {
@@ -21,19 +22,17 @@ namespace std {
 	};
 }
 
-using MySet = std::unordered_set<std::vector<int>>;
-
 class NCLBoardTraverser
 {
 public:
-	NCLBoardTraverser(NCLBoard* board, const bool& containSPACE);
+	NCLBoardTraverser(NCLBoard* board, const bool& containSPACE); 
 	
 	ContinuousNumber GetTotalContinuousNumber() { return totalContinuousNumber; }
 private:
 	int size;
-	unordered_set<vector<char>> boardSet;
-	ContinuousNumber totalContinuousNumber;
+	unordered_set<vector<char>> boardSet; // the history of searching
+	ContinuousNumber totalContinuousNumber; // output result
 
-	ContinuousNumber Travers(NCLBoard *board, const bool& containSPACE);
+	ContinuousNumber Travers(NCLBoard *board, const bool& containSPACE); // search all possible move and check continuous for all vaild turn
 };
 

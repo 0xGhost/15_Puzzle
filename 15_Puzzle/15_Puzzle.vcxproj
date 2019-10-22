@@ -160,13 +160,17 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="NCLBoard.cpp" />
     <ClCompile Include="NCLBoardTraverser.cpp" />
+    <ClCompile Include="ThreadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BigPosInt.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Comparable.h" />
+    <ClInclude Include="ctpl.h" />
+    <ClInclude Include="ctpl_stl.h" />
     <ClInclude Include="NCLBoard.h" />
     <ClInclude Include="NCLBoardTraverser.h" />
+    <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>

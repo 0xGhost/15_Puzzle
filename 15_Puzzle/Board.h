@@ -20,12 +20,12 @@ public:
 
 	Board(const int& size, const int& min, const int& max); // random generate a puzzle board
 	Board(const int& size, int* input); // input a board using an array
-	Board(const Board& board);
+	Board(const Board& board); // copy constructor
 	virtual ~Board();
-	bool MoveCheck(const Direction& direction) const;
+	bool MoveCheck(const Direction& direction) const; // check if a move is possible
 	bool Move(const Direction& direction); // move the space to a direction
 	bool isEqualTo(const Comparable& rhs) const override;
-	int* GetBlocks() const;
+	int* GetBlocks() const; // return the array stored blocks
 	
 protected:
 	
@@ -41,7 +41,7 @@ protected:
 
 private:
 	int numberMaxLength; // The max length of numbers that appear in the board. It is used for display the board
-	int* RandomGenerator(const int& min, const int& max); // random generate non-repeating numbers in rang [min,max]. The space in the bottom right
+	int* RandomGenerator(const int& min, const int& max) const; // random generate non-repeating numbers in rang [min,max]. The space in the bottom right
 	virtual std::ostream& print(std::ostream& ostr, const Comparable& comparable) const override;
 };
 

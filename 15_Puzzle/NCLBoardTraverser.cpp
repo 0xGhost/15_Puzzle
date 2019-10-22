@@ -15,41 +15,38 @@ NCLBoardTraverser::NCLBoardTraverser(NCLBoard* board, const bool& containSPACE) 
 #define Queue
 #ifdef Queue
 
+// BFS to travers all possible configurations and check the continuous if it is a "turn end"
 ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board, const bool& containSPACE)
 {
 	size = board->SIZE;
-	queue<NCLBoard*> queue;
-
+	queue<NCLBoard*> queue; // pending queue stored the Boards that pending to be processed
+	// initialize
 	NCLBoard* newBoard = new NCLBoard(*board);
 	queue.push(newBoard);
-
 	boardSet.insert(newBoard->ToVector());
 	NCLBoard *currentBoard;
 	
 	while (!queue.empty())
 	{
-		currentBoard = queue.front();
+		currentBoard = queue.front(); // get one Board in queue from pending state to processing state
 		queue.pop();
-		vector<char> history = currentBoard->ToVector();
-		
-		int a = queue.size();
 
-		if (currentBoard->IsTurnEnd())
+		if (currentBoard->IsTurnEnd()) // check if this configuration is a "turn end"
 		{
 			totalContinuousNumber += currentBoard->CheckContinuous(containSPACE);
 		}
 
 		auto BoardMove = [&](Direction diretion)
 		{
-			if (currentBoard->MoveCheck(diretion))
+			if (currentBoard->MoveCheck(diretion)) // check if a move is possible
 			{
 				NCLBoard* newBoard = new NCLBoard(*currentBoard);
 				newBoard->Move(diretion);
 
-				if (boardSet.count(newBoard->ToVector()) == 0)
+				if (boardSet.count(newBoard->ToVector()) == 0) // check if this configuration is already searched
 				{
-					queue.push(newBoard);
-					boardSet.insert(newBoard->ToVector());
+					queue.push(newBoard); // add this board into the end of pending queue
+					boardSet.insert(newBoard->ToVector()); // add this board into the searching history
 				}
 				else
 				{
@@ -71,6 +68,7 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board, const bool& contain
 }
 #endif
 #ifdef Stack
+// BFS to travers all possible configurations and check the continuous if it is a "turn end" 
 ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board)
 {
 	size = board->SIZE;

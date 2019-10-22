@@ -4,7 +4,8 @@
 #include "Utility.h"
 #include "BigPosInt.h"
 
-inline BigPosInt Factorial(size_t start, size_t end)
+// calculate: start * (start + 1) * .... * (end - 1) * end
+inline BigPosInt Factorial(size_t start, size_t end) 
 {
 	BigPosInt factorial = 1;
 	for (size_t i = start; i <= end; ++i)
@@ -60,15 +61,15 @@ BigPosInt NCLBoard::GetTotalContinuousNumber(const bool& containSpace, const int
 		if (containSpace)
 		{
 			// possible continuous row configuration: n - (partial - 1) + 1
-			// reachable board configuration: (SIZE*SIZE - 3)! / 2
+			// reachable board configuration: (SIZE*SIZE - SIZE)! / 2
 			if ((n - partial + 2) > 0)
-				result +=  Factorial(3, size - 2) * (n - partial + 2);
+				result +=  Factorial(3, size - SIZE + 1) * (n - partial + 2);
 		}
 		// not contain SPACE: 
 			//possible continuous row configuration: n - partial + 1
-			// reachable board configuration: (SIZE*SIZE - 4)! / 2 * (SIZE - 1)
+			// reachable board configuration: (SIZE*SIZE - SIZE - 1)! / 2 * (SIZE - 1)
 		if ((n - partial + 1) > 0)
-			result +=  Factorial(3, size - 3) * (n - partial + 1) * (SIZE - 1);
+			result +=  Factorial(3, size - SIZE) * (n - partial + 1) * (SIZE - 1);
 	}
 	return result;
 }
@@ -108,7 +109,7 @@ ContinuousNumber NCLBoard::CheckContinuous(const bool& containSPACE, const int& 
 	return result;
 }
 
-string NCLBoard::ToString()
+string NCLBoard::ToString() const
 {
 	string str;
 	for (int i = 0; i < SIZE * SIZE; i++)
@@ -119,7 +120,7 @@ string NCLBoard::ToString()
 	return str;
 }
 
-vector<char> NCLBoard::ToVector()
+vector<char> NCLBoard::ToVector() const
 {
 	vector<char> vec;
 	for (int i = 0; i < SIZE * SIZE; i++)
@@ -134,20 +135,25 @@ vector<char> NCLBoard::ToVector()
 bool NCLBoard::CheckContinuousFromPoint(const bool& containSPACE, const int& length, const int& x, const int& y, const Direction& direction) const
 {
 	int result;
+	// the next block position offset according to current block
 	int moveX = (direction & 1) ? direction : 0;
 	int moveY = (direction & 1) ? 0 : direction >> 1;
+	// the current block position
 	int checkX = x;
 	int checkY = y;
 	int count = 1;
 
 	while (count < length)
 	{
+		// check if cannot contain SPACE block
 		if ((blocks[IndexOf(checkX, checkY)] == SPACE || blocks[IndexOf(checkX + moveX, checkY + moveY)] == SPACE) && !containSPACE)
 			return false;
+
 		if (blocks[IndexOf(checkX, checkY)] + 1 == blocks[IndexOf(checkX + moveX, checkY + moveY)]
 			|| blocks[IndexOf(checkX, checkY)] == SPACE 
 			|| blocks[IndexOf(checkX + moveX, checkY + moveY)] == SPACE)
 		{
+			// move current block position to next block position using the offset
 			checkX += moveX;
 			checkY += moveY;
 			count++;
