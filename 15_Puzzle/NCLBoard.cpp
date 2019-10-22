@@ -61,15 +61,15 @@ BigPosInt NCLBoard::GetTotalContinuousNumber(const bool& containSpace, const int
 		if (containSpace)
 		{
 			// possible continuous row configuration: n - (partial - 1) + 1
-			// reachable board configuration: (SIZE*SIZE - 3)! / 2
+			// reachable board configuration: (SIZE*SIZE - SIZE)! / 2
 			if ((n - partial + 2) > 0)
-				result +=  Factorial(3, size - 2) * (n - partial + 2);
+				result +=  Factorial(3, size - SIZE + 1) * (n - partial + 2);
 		}
 		// not contain SPACE: 
 			//possible continuous row configuration: n - partial + 1
-			// reachable board configuration: (SIZE*SIZE - 4)! / 2 * (SIZE - 1)
+			// reachable board configuration: (SIZE*SIZE - SIZE - 1)! / 2 * (SIZE - 1)
 		if ((n - partial + 1) > 0)
-			result +=  Factorial(3, size - 3) * (n - partial + 1) * (SIZE - 1);
+			result +=  Factorial(3, size - SIZE) * (n - partial + 1) * (SIZE - 1);
 	}
 	return result;
 }

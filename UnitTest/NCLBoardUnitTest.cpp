@@ -397,6 +397,19 @@ namespace UnitTest
 			}
 		}
 
+		TEST_METHOD(TestGetTotalContinuousNumber1_nospace)
+		{
+			int load = 2;
+			for (int i = 1; i < load; i++)
+			{
+				NCLBoard board1(3, 1, 8);
+				NCLBoardTraverser t(&board1, false);
+				ContinuousNumber c = t.GetTotalContinuousNumber();
+				BigPosInt b = c.row;
+				Assert::IsTrue(board1.GetTotalContinuousNumber(false) == b);
+			}
+		}
+
 		TEST_METHOD(TestGetTotalContinuousNumber2)
 		{
 			int load = 2;
@@ -410,6 +423,19 @@ namespace UnitTest
 			}
 		}
 
+		TEST_METHOD(TestGetTotalContinuousNumber2_nospace)
+		{
+			int load = 2;
+			for (int i = 1; i < load; i++)
+			{
+				NCLBoard board1(3, 1, 12);
+				NCLBoardTraverser t(&board1, false);
+				ContinuousNumber c = t.GetTotalContinuousNumber();
+				BigPosInt b = c.row;
+				Assert::IsTrue(board1.GetTotalContinuousNumber(false) == b);
+			}
+		}
+
 		TEST_METHOD(TestGetTotalContinuousNumber3)
 		{
 			int load = 2;
@@ -420,6 +446,19 @@ namespace UnitTest
 				ContinuousNumber c = t.GetTotalContinuousNumber();
 				BigPosInt b = c.row;
 				Assert::IsTrue(board1.GetTotalContinuousNumber(true) == b);
+			}
+		}
+
+		TEST_METHOD(TestGetTotalContinuousNumber3_nospace)
+		{
+			int load = 2;
+			for (int i = 1; i < load; i++)
+			{
+				NCLBoard board1(3, 10, 30);
+				NCLBoardTraverser t(&board1, false);
+				ContinuousNumber c = t.GetTotalContinuousNumber();
+				BigPosInt b = c.row;
+				Assert::IsTrue(board1.GetTotalContinuousNumber(false) == b);
 			}
 		}
 	};
