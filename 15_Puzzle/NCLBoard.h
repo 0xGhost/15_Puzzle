@@ -5,6 +5,7 @@
 #include "BigPosInt.h"
 #include <string>
 #include <vector>
+#include "ctpl_stl.h"
 
 using std::string;
 using std::vector;
@@ -49,6 +50,7 @@ public:
 	vector<char> ToVector() const; // return a vector represent the puzzle configuration
 
 private:
+	 static ctpl::thread_pool thPool;
 	// check if there are given length of continuous from given block position in given direction
 	bool CheckContinuousFromPoint(const bool& containSPACE, const int& length, const int& x, const int& y, const Direction& direction) const;
 };

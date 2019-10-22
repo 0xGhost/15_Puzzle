@@ -20,6 +20,7 @@
 #include <unordered_set>
 #include "NCLBoardTraverser.h"
 #include "NCLBoard.h"
+#include "ctpl_stl.h"
 
 using namespace std;
 using std::cout;
@@ -56,7 +57,7 @@ inline void ReadPuzzleFile(vector<NCLBoard*>& boards, const string& fileName) th
 	for (int j = 0; j < numberOfPuzzles; j++)
 	{
 		// get the first row of a puzzle and find out it size
-		int size = 0;
+		ull size = 0;
 		string firstRow;
 		vector<int> firstRowBlocks;
 		while (size < 3)
@@ -240,6 +241,7 @@ int main()
 	_CrtDumpMemoryLeaks();
 	return 0;
 #endif	
+	ctpl::thread_pool thPool(10 /* ten threads in the pool */);
 
 	const int MAX_SIZE = 100;
 
@@ -378,7 +380,9 @@ int main()
 			}
 			cout << "How many digits for partial continuous (enter an integer N to find N-partial):" << endl;
 			InputInteger(inputNumber, 2, MAX_SIZE);
-			ContinuousNumber* cResults = new ContinuousNumber[boards.size()];
+			//ContinuousNumber* cResults = new ContinuousNumber[boards.size()];
+
+
 			for (int i = 0; i < boards.size(); i++)
 			{
 				ContinuousNumber con = boards[i]->CheckContinuous(containSpace, inputNumber);

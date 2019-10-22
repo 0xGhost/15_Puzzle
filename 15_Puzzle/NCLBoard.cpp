@@ -4,11 +4,13 @@
 #include "Utility.h"
 #include "BigPosInt.h"
 
+ctpl::thread_pool NCLBoard::thPool(2);
+
 // calculate: start * (start + 1) * .... * (end - 1) * end
-inline BigPosInt Factorial(size_t start, size_t end) 
+inline BigPosInt Factorial(ull start, ull end) 
 {
 	BigPosInt factorial = 1;
-	for (size_t i = start; i <= end; ++i)
+	for (ull i = start; i <= end; ++i)
 	{
 		factorial *= i;
 	}
