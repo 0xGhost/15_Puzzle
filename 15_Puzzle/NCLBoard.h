@@ -11,10 +11,10 @@ using std::vector;
 
 struct ContinuousNumber
 {
-	int column = 0;
-	int row = 0;
-	int columnReverse = 0;
-	int rowReverse = 0;
+	unsigned long long column = 0;
+	unsigned long long  row = 0;
+	unsigned long long  columnReverse = 0;
+	unsigned long long  rowReverse = 0;
 	inline bool operator==(const ContinuousNumber& rhs) const
 	{
 		return column == rhs.column

@@ -364,6 +364,7 @@ int main()
 		case 8:
 			cout << "How many digits for partial continuous (enter an integer N to find N-partial):" << endl;
 			InputInteger(inputNumber, 2, MAX_SIZE);
+			ContinuousNumber* cResults = new ContinuousNumber[boards.size()];
 			for (int i = 0; i < boards.size(); i++)
 			{
 				ContinuousNumber con = boards[i]->CheckContinuous(containSpace, inputNumber);
