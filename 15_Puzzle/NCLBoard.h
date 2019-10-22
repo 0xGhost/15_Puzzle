@@ -45,10 +45,11 @@ public:
 	BigPosInt GetTotalContinuousNumber(const bool& containSpace) const; // return continuous number (all are the same)
 	ContinuousNumber CheckContinuous(const bool& containSPACE) const; // check full continuous in all directions
 	ContinuousNumber CheckContinuous(const bool& containSPACE, const int& length) const; // check partial continuous in all directions
-	string ToString();
-	vector<char> ToVector();
+	string ToString() const; // return a string represent the puzzle configuration
+	vector<char> ToVector() const; // return a vector represent the puzzle configuration
 
 private:
+	// check if there are given length of continuous from given block position in given direction
 	bool CheckContinuousFromPoint(const bool& containSPACE, const int& length, const int& x, const int& y, const Direction& direction) const;
 };
 

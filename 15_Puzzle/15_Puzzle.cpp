@@ -43,7 +43,6 @@ inline void WritePuzzleFile(const vector<NCLBoard*>& boards, const string& fileN
 	fileOutput.close();
 }
 
-// length: length of each puzzle 
 inline void ReadPuzzleFile(vector<NCLBoard*>& boards, const string& fileName) throw (invalid_argument)
 {
 	ifstream fileInput;
@@ -56,6 +55,7 @@ inline void ReadPuzzleFile(vector<NCLBoard*>& boards, const string& fileName) th
 	fileInput >> numberOfPuzzles;
 	for (int j = 0; j < numberOfPuzzles; j++)
 	{
+		// get the first row of a puzzle and find out it size
 		int size = 0;
 		string firstRow;
 		vector<int> firstRowBlocks;
@@ -74,7 +74,8 @@ inline void ReadPuzzleFile(vector<NCLBoard*>& boards, const string& fileName) th
 		}
 		int length = size * size - 1;
 		int *inputArray = new int[length + 1];
-		
+
+		// read the whole puzzle
 		for (int i = 0; i < size; i++)
 		{
 			inputArray[i] = firstRowBlocks[i];
@@ -84,11 +85,12 @@ inline void ReadPuzzleFile(vector<NCLBoard*>& boards, const string& fileName) th
 			fileInput >> inputArray[i];
 		}
 		inputArray[length] = -1;
+
+		// create puzzle board and stored into the vector 'boards'
 		boards.push_back(new NCLBoard(size, inputArray));
 		delete[] inputArray;
 		inputArray = nullptr;
 	}
-
 	fileInput.close();
 }
 
@@ -148,22 +150,27 @@ inline void InputInteger(int& input, const int& min, const int& max)
 inline int* inputBoardConfiguration(const int& length)
 {
 	unordered_set<int> hashTable;
-	int* array = new int[length];
+	int* array = new int[length + 1];
 	int inputNumber;
 	for (int i = 0; i < length; i++)
 	{
 		do
 		{
 			InputInteger(inputNumber, 1, INT_MAX);
+			// check if the number is already in the hashTable
 			if (hashTable.count(inputNumber) != 0)
 			{
 				std::cout << "Number " << inputNumber << " is already exist." << endl;
-				continue;
 			}
-			hashTable.insert(inputNumber);
-			array[i] = inputNumber;
-		} while (false);
+			else 
+			{
+				hashTable.insert(inputNumber);
+				array[i] = inputNumber;
+				break;
+			}
+		} while (true);
 	}
+	array[length] = -1;
 	return array;
 }
 
@@ -234,7 +241,7 @@ int main()
 	return 0;
 #endif	
 
-	const int MAX_SIZE = 10;
+	const int MAX_SIZE = 100;
 
 	int option;
 	bool exitFlag = false;
@@ -277,6 +284,7 @@ int main()
 				int* inputArray = inputBoardConfiguration(length);
 				NCLBoard *newBoard = new NCLBoard(size, inputArray);
 				boards.push_back(newBoard);
+				std::cout << "\n" << *newBoard;
 				delete inputArray;
 				inputArray = nullptr;						
 			}
@@ -291,7 +299,7 @@ int main()
 			InputInteger(min, 1, INT_MAX - (size * size));
 			std::cout << "Enter the maximum integer for the random generation:";
 			InputInteger(max, min + (size * size) - 2, INT_MAX);
-
+			// show random generated puzzles
 			for (int i = 0; i < inputNumber; i++)
 			{
 				NCLBoard *newBoard = new NCLBoard(size, min, max);
@@ -353,6 +361,7 @@ int main()
 			std::cout << " 0: not contain SPACE.    1: contain SPACE." << endl;
 			InputInteger(inputNumber, 0, 1);
 			containSpace = inputNumber;
+			break;
 		case 7:
 			for (NCLBoard* board : boards)
 			{
@@ -362,6 +371,11 @@ int main()
 			boards.clear();
 			break;
 		case 8:
+			if (boards.size() == 0)
+			{
+				std::cout << "There is no puzzle in memory." << endl;
+				break;
+			}
 			cout << "How many digits for partial continuous (enter an integer N to find N-partial):" << endl;
 			InputInteger(inputNumber, 2, MAX_SIZE);
 			for (int i = 0; i < boards.size(); i++)
@@ -375,6 +389,11 @@ int main()
 			}
 			break;
 		case 9:
+			if (boards.size() == 0)
+			{
+				std::cout << "There is no puzzle in memory." << endl;
+				break;
+			}
 			cout << "How many digits for partial continuous (enter an integer N to find N-partial):" << endl;
 			InputInteger(inputNumber, 2, MAX_SIZE);
 			for (int i = 0; i < boards.size(); i++)

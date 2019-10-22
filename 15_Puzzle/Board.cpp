@@ -7,7 +7,7 @@
 
 using std::deque;
 using std::invalid_argument;
-using util::GetNumberLength;
+
 
 
 Board::Board(const int& size = 4, const int& min = 1, const int& max = 20)
@@ -22,18 +22,19 @@ Board::Board(const int& size, int* input)
 {
 	blocks = new int[SIZE * SIZE];
 	memcpy(blocks, input, SIZE * SIZE * sizeof(int));
-	if (blocks[IndexOf(spaceX, spaceY)] != SPACE)
+	if (blocks[IndexOf(spaceX, spaceY)] != SPACE) // if SPACE is not in the bottom right
 	{
 		for (int i = 0; i < SIZE * SIZE; i++)
 		{
 			
-			if (input[i] == SPACE)
+			if (input[i] == SPACE) // set the SPACE block position
 			{
 				spaceX = i % SIZE;
 				spaceY = i / SIZE;
 			}
 		}
 	}
+	// set the max length for print alignment
 	for(int i = 0; i < SIZE * SIZE; i++)
 		max = input[i] > max ? input[i] : max;
 	numberMaxLength = GetNumberLength(max);
@@ -64,17 +65,14 @@ bool Board::MoveCheck(const Direction& direction) const
 
 bool Board::MoveCheck(const Direction& direction, int& positionX, int& positionY) const
 {
-	// get the space position after the move
+	// get the SPACE block position after the move
 	int positionX_Temp = ((direction & 1) ? spaceX + direction : spaceX);
-	int positionY_Temp = ((direction & 1) ? spaceY : spaceY + (direction >> 1));
+	int positionY_Temp = ((direction & 1) ? spaceY : spaceY + (direction >> 1)); // '& 1' is '% 2' ;  '>> 1' is '/ 2'
+	
 	// check if the move is valid
 	if (positionX_Temp < 0 || positionX_Temp >= SIZE || positionY_Temp < 0 || positionY_Temp >= SIZE)
 		return false;
-	/*
-	//TODO: check if the code above is quicker then behand
-	int positionX_Temp = ((direction % 2) ? spaceX + direction : spaceX);
-	int positionY_Temp = ((direction % 2) ? spaceY : spaceY + (direction / 2));
-	*/
+	
 	positionX = positionX_Temp;
 	positionY = positionY_Temp;
 	return true;
@@ -111,17 +109,17 @@ int* Board::GetBlocks() const
 	return blocks;
 }
 
-int* Board::RandomGenerator(const int& min, const int& max)
+int* Board::RandomGenerator(const int& min, const int& max) const
 {
 	int size = SIZE * SIZE;
 	int range = (max - min + 1);
-	deque<int>* bucket = new deque<int>[range];
+	deque<int>* bucket = new deque<int>[range]; // a bucket that each slots is a deque
 	int* array = new int[size];
-
-
+	// loop through all numbers in range
 	for (int number = min; number <= max; number++)
 	{
-		int b_index = rand() % range;
+		int b_index = rand() % range; // random find the bucket index for each number
+		// random put the number in the front or back of a deque
 		if (rand() & 1)
 		{
 			bucket[b_index].push_back(number);
@@ -131,6 +129,7 @@ int* Board::RandomGenerator(const int& min, const int& max)
 			bucket[b_index].push_front(number);
 		}
 	}
+	// output the numbers in the bucket into array
 	int index = 0;
 	for (int i = 0; i < range; i++)
 	{
@@ -166,7 +165,7 @@ std::ostream& Board::print(std::ostream& ostr, const Comparable& comparable) con
 		for (int j = 0; j < SIZE; j++)
 		{
 			int block = ((Board*)& comparable)->blocks[IndexOf(j, i)];
-			ostr << std::left << std::setw((long long)numberMaxLength + 2) << std::setfill(' ');
+			ostr << std::left << std::setw((long long)numberMaxLength + 2) << std::setfill(' '); // set space between numbers for alignment 
 			
 			if (block == SPACE)
 				ostr << ' ';

@@ -10,13 +10,13 @@ using std::vector;
 class BigPosInt
 {
 public:
-	const int baseLength = util::GetNumberLength(~(util::size_t)0) / 2; // number of digits for each slots
-	const util::size_t base = pow(10, baseLength); // max number for each slots
+	const int baseLength = GetNumberLength(~(ull)0) / 2; // number of digits for each slots
+	const ull base = pow(10, baseLength); // max number for each slots
 	BigPosInt() {};
-	BigPosInt(util::size_t value);
+	BigPosInt(ull value);
 	BigPosInt(const BigPosInt& value);
 
-	virtual void operator= (util::size_t num);
+	virtual void operator= (ull num);
 	virtual void operator= (const BigPosInt& num);
 	virtual BigPosInt operator+(const BigPosInt& rhs) const;
 	virtual void operator+=(const BigPosInt& rhs);
@@ -27,7 +27,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& ostr, const BigPosInt& num);
 
 protected:
-	vector<util::size_t> number;
+	vector<ull> number;
 
 };
 

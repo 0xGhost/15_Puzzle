@@ -6,7 +6,7 @@
 
 #define max(a,b) a>b?a:b
 
-BigPosInt::BigPosInt(util::size_t value)
+BigPosInt::BigPosInt(ull value)
 {
 	*this = value;
 }
@@ -16,7 +16,7 @@ BigPosInt::BigPosInt(const BigPosInt& value)
 	*this = value;
 }
 
-void BigPosInt::operator=(util::size_t num)
+void BigPosInt::operator=(ull num)
 {
 	while (num > 0)
 	{
@@ -36,11 +36,11 @@ BigPosInt BigPosInt::operator+(const BigPosInt& rhs) const
 	bool carry = false;
 	for (int i = 0; i < (max(number.size(), rhs.number.size())) || carry; i++)
 	{
-		if (i == result.number.size())
+		if (i == result.number.size()) // result size is not enough
 			result.number.push_back(0);
 		result.number[i] += carry + (i < number.size() ? number[i] : 0);
 		carry = result.number[i] >= base;
-		if (carry)
+		if (carry) // check carry bit
 			result.number[i] -= base;
 	}
 	return result;
@@ -54,36 +54,22 @@ void BigPosInt::operator+=(const BigPosInt& rhs)
 BigPosInt BigPosInt::operator*(unsigned int num) const
 {
 	BigPosInt result = *this;
-	for (util::size_t i = 0, carry = 0; i < result.number.size() || carry; i++)
+	for (ull i = 0, carry = 0; i < result.number.size() || carry; i++)
 	{
-		if (i == (int)result.number.size())
+		if (i == (int)result.number.size()) // result size is not enough
 			result.number.push_back(0);
-		util::size_t current = result.number[i] * (util::size_t)num + carry;
-		carry = (util::size_t)(current / base);
-		result.number[i] = (util::size_t)(current % base);
-		//asm("divl %%ecx" : "=a"(carry), "=d"(a[i]) : "A"(cur), "c"(base));
+		ull current = result.number[i] * (ull)num + carry;
+		carry = (ull)(current / base);
+		result.number[i] = (ull)(current % base);
 	}
-	while (!result.number.empty() && !result.number.back())
+	while (!result.number.empty() && !result.number.back()) // delelte 0s in the front of a number; eg: 001000 -> 1000
 		result.number.pop_back();
-	//trim();
 	return result;
 }
 
 void BigPosInt::operator*=(unsigned int num)
 {
-	for (util::size_t i = 0, carry = 0; i < number.size() || carry; i++)
-	{
-		if (i == number.size())
-			number.push_back(0);
-		util::size_t current = number[i] * (util::size_t)num + carry;
-		carry = (util::size_t)(current / base);
-		number[i] = (util::size_t)(current % base);
-		//asm("divl %%ecx" : "=a"(carry), "=d"(a[i]) : "A"(cur), "c"(base));
-	}
-	while (!number.empty() && !number.back())
-		number.pop_back();
-	//trim();
-
+	*this = *this * num;
 }
 
 bool BigPosInt::operator==(const BigPosInt& num) const
