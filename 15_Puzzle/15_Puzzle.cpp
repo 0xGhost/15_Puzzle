@@ -241,7 +241,9 @@ int main()
 	_CrtDumpMemoryLeaks();
 	return 0;
 #endif	
-	ctpl::thread_pool thPool(10 /* ten threads in the pool */);
+	const int threadsNum = std::thread::hardware_concurrency();
+	ctpl::thread_pool thPool(threadsNum);
+	std::mutex boardsMutex;
 
 	const int MAX_SIZE = 100;
 
@@ -292,6 +294,7 @@ int main()
 			}
 			break;
 		case 2:
+		{
 			int size, min, max;
 			std::cout << "Enter the size of random generated puzzles(eg: 4 for a 15-puzzle): ";
 			InputInteger(size, 3, MAX_SIZE);
@@ -302,12 +305,35 @@ int main()
 			std::cout << "Enter the maximum integer for the random generation:";
 			InputInteger(max, min + (size * size) - 2, INT_MAX);
 			// show random generated puzzles
-			for (int i = 0; i < inputNumber; i++)
+			int count = inputNumber;
+			int loopNum = 0.5f + (float)inputNumber / threadsNum;
+			auto* f = new std::future<void>[threadsNum];
+			int thLoopCount = threadsNum < count? threadsNum : count;
+			for (int j = 0; j < thLoopCount; j++)
 			{
-				NCLBoard *newBoard = new NCLBoard(size, min, max);
-				boards.push_back(newBoard);
-				std::cout << "\n" << *newBoard;
+				if (j == thLoopCount - 1)
+					loopNum = count;
+				else
+					count -= loopNum;
+				f[j] = thPool.push([&](int, int loopNum)
+					{
+						for (int i = 0; i < loopNum; i++)
+						{
+							NCLBoard* newBoard = new NCLBoard(size, min, max);
+							boardsMutex.lock();
+							boards.push_back(newBoard);
+							std::cout << "\n" << *newBoard;
+							boardsMutex.unlock();
+						}
+					}, loopNum);
+				
 			}
+			for (int j = 0; j < thLoopCount; j++)
+			{
+				f[j].get();
+			}
+			delete[] f;
+		}
 			break;
 		case 3:
 			if (boards.size() == 0)
@@ -373,6 +399,7 @@ int main()
 			boards.clear();
 			break;
 		case 8:
+		{
 			if (boards.size() == 0)
 			{
 				std::cout << "There is no puzzle in memory." << endl;
@@ -380,18 +407,53 @@ int main()
 			}
 			cout << "How many digits for partial continuous (enter an integer N to find N-partial):" << endl;
 			InputInteger(inputNumber, 2, MAX_SIZE);
-			//ContinuousNumber* cResults = new ContinuousNumber[boards.size()];
-
-
-			for (int i = 0; i < boards.size(); i++)
+			ContinuousNumber* results = new ContinuousNumber[boards.size()];
+			std::future<int>* fResult = new std::future<int>[threadsNum];
+			int numberOfboards = boards.size();
+			int loopCount = 0.5f + (float)numberOfboards / threadsNum;
+			int index = 0;
+			int thLoopCount = threadsNum < numberOfboards ? threadsNum : numberOfboards;
+			for (int j = 0; j < thLoopCount; j++)
 			{
-				ContinuousNumber con = boards[i]->CheckContinuous(containSpace, inputNumber);
-				cout << "\n" << *boards[i];
-				cout << "row = " << con.row << endl;
-				cout << "rowReverse = " << con.rowReverse << endl;
-				cout << "column = " << con.column << endl;
-				cout << "columnReverse = " << con.columnReverse << endl;
+				if (j == thLoopCount - 1)
+					loopCount = numberOfboards;
+				else
+					numberOfboards -= loopCount;
+				fResult[j] = thPool.push([&](int, int loopCount, int th_index)
+					{
+						for (int i = 0; i < loopCount; i++)
+						{
+							results[th_index] = boards[th_index]->CheckContinuous(containSpace, inputNumber);
+							th_index++;
+						}
+						return th_index;
+					}, loopCount, index);
+				index += loopCount;
+				
 			}
+
+			index = 0;
+			for (int j = 0; j < thLoopCount; j++)
+			{
+				int end = fResult[j].get();
+				
+				while(index < end)
+				{
+					ContinuousNumber con = results[index];
+					cout << "\n" << *(boards[index]);
+					cout << "row = " << con.row << endl;
+					cout << "rowReverse = " << con.rowReverse << endl;
+					cout << "column = " << con.column << endl;
+					cout << "columnReverse = " << con.columnReverse << endl;
+					index++;
+				}
+			}
+
+			delete[] results;
+			delete[] fResult;
+			results = nullptr;
+			fResult = nullptr;
+		}
 			break;
 		case 9:
 			if (boards.size() == 0)

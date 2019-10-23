@@ -4,11 +4,15 @@
 #include "CppUnitTest.h"
 #include "..//15_Puzzle/Board.h"
 #include "..//15_Puzzle/Board.cpp"
+#include "..//15_Puzzle/ctpl_stl.h"
 
 #include <sstream>
 #include <iostream>
+#include <vector>
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
+#include <future>
+#include <mutex>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -198,6 +202,56 @@ namespace UnitTest
 			board0.Move(Direction::Top);
 			board0.Move(Direction::Left);
 			Assert::IsTrue(board0.isEqualTo(board1));
+		}
+
+		TEST_METHOD(RandomGenerationMultiThreading)
+		{
+			int thNum = 6;
+			ctpl::thread_pool tp(6);
+			auto* f = new std::future<void>[thNum];
+			std::mutex mtx;
+			int load = 10000;
+			std::vector<Board*> container;
+
+			for (int j = 0; j < thNum; j++)
+			{
+				f[j] = tp.push([&](int)
+					{
+						for (int i = 0; i < load / thNum; i++)
+						{
+							Board* newBoard = new Board(4, 1, 20);
+							mtx.lock();
+							container.push_back(newBoard);
+							mtx.unlock();
+						}
+					});
+			}
+			for (int j = 0; j < thNum; j++)
+			{
+				f[j].get();
+			}
+			delete[] f;
+			for (Board* board : container)
+			{
+				delete board;
+				board = nullptr;
+			}
+		}
+		TEST_METHOD(RandomGenerationTestNoMultiThreading)
+		{
+			int load = 10000;
+			std::vector<Board*> container;
+			for (int i = 0; i < load; i++)
+			{
+				Board* newBoard = new Board(4, 1, 20);
+				container.push_back(newBoard);
+			}
+
+			for (Board* board : container)
+			{
+				delete board;
+				board = nullptr;
+			}
 		}
 	};
 }

@@ -328,6 +328,99 @@ namespace UnitTest
 
 		}
 
+		TEST_METHOD(CheckContinuousLoadNoMultiThreading1)
+		{
+			int data[16] =
+			{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			20, 19, 18, 17,
+			13, 14, 15, -1 };
+			int load = 10000;
+			for (int i = 0; i < load; i++)
+			{
+				NCLBoard board1(4, data);
+				ContinuousNumber result0 = board1.CheckContinuous(true);
+				ContinuousNumber result1;
+				result1.column = 0;
+				result1.row = 3;
+				result1.columnReverse = 0;
+				result1.rowReverse = 1;
+				Assert::IsTrue(result0 == result1);
+			}
+
+		}
+
+		TEST_METHOD(CheckContinuousLoadNoMultiThreading2)
+		{
+			
+			int load = 10000;
+			for (int i = 0; i < load; i++)
+			{
+				NCLBoard board1(4, 1, 20);
+				ContinuousNumber result0 = board1.CheckContinuous(true);
+			}
+
+		}
+
+		TEST_METHOD(CheckContinuousLoadMultiThreading1)
+		{
+			int data[16] =
+			{ 1, 2, 3, 4,
+			5, 6, 7, 8,
+			20, 19, 18, 17,
+			13, 14, 15, -1 };
+			int thNum = 6;
+			ctpl::thread_pool thPool(thNum);
+			int load = 10000;
+			auto* f = new std::future<void>[thNum];
+			for (int j = 0; j < thNum; j++)
+			{
+				f[j] = thPool.push([&](int)
+					{
+						for (int i = 0; i < load / thNum; i++)
+						{
+
+							NCLBoard board1(4, data);
+							ContinuousNumber result0 = board1.CheckContinuous(true);
+							ContinuousNumber result1;
+							result1.column = 0;
+							result1.row = 3;
+							result1.columnReverse = 0;
+							result1.rowReverse = 1;
+							Assert::IsTrue(result0 == result1);
+
+						}
+					});
+			}
+			for (int j = 0; j < thNum; j++)
+			{
+				f[j].get();
+			}
+		}
+
+		TEST_METHOD(CheckContinuousLoadMultiThreading2)
+		{
+			int thNum = 6;
+			ctpl::thread_pool thPool(thNum);
+			int load = 10000;
+			auto* f = new std::future<void>[thNum];
+			for (int j = 0; j < thNum; j++)
+			{
+				f[j] = thPool.push([&](int)
+					{
+						for (int i = 0; i < load/ thNum; i++)
+						{
+							NCLBoard board1(4, 1, 20);
+							ContinuousNumber result0 = board1.CheckContinuous(true);
+						}
+					});
+			}
+			for (int j = 0; j < thNum; j++)
+			{
+				f[j].get();
+			}
+		}
+
 		TEST_METHOD(CheckMixedContinuous3)
 		{
 			int data[16] =
@@ -412,7 +505,7 @@ namespace UnitTest
 
 		TEST_METHOD(TestGetTotalContinuousNumber2)
 		{
-			int load = 5;
+			int load = 2;
 			for (int i = 1; i < load; i++)
 			{
 				NCLBoard board1(3, 1, 12);
@@ -460,6 +553,44 @@ namespace UnitTest
 				BigPosInt b = c.row;
 				Assert::IsTrue(board1.GetTotalContinuousNumber(false) == b);
 			}
+		}
+		TEST_METHOD(TestGetTotalContinuousNumberNoMultiThreading1)
+		{
+			int load = 5;
+
+			for (int i = 1; i < load; i++)
+			{
+				NCLBoard board1(3, 1, 12);
+				NCLBoardTraverser t(&board1, true);
+				ContinuousNumber c = t.GetTotalContinuousNumber();
+				BigPosInt b = c.row;
+				Assert::IsTrue(board1.GetTotalContinuousNumber(true) == b);
+			}
+		}
+		TEST_METHOD(TestGetTotalContinuousNumberMultiThreading1)
+		{
+			int load = 5;
+			ctpl::thread_pool thPool(5);
+			std::future<bool> *futures = new std::future<bool>[load];
+
+			for (int i = 1; i < load; i++)
+			{
+				futures[i] = thPool.push([](int)
+					{
+						NCLBoard board1(3, 1, 12);
+						NCLBoardTraverser t(&board1, true);
+						ContinuousNumber c = t.GetTotalContinuousNumber();
+						BigPosInt b = c.row;
+						return board1.GetTotalContinuousNumber(true) == b;
+					}
+
+				);
+			}
+			for (int i = 1; i < load; i++)
+			{
+				Assert::IsTrue(futures[i].get());
+			}
+			delete[] futures;
 		}
 	};
 }
