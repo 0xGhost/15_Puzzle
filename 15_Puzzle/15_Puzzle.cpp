@@ -304,23 +304,25 @@ int main()
 			InputInteger(min, 1, INT_MAX - (size * size));
 			std::cout << "Enter the maximum integer for the random generation:";
 			InputInteger(max, min + (size * size) - 2, INT_MAX);
-			// show random generated puzzles
+
 			int count = inputNumber;
-			int loopNum = 0.5f + (float)inputNumber / threadsNum;
+			int loopNum = 0.5f + (float)inputNumber / threadsNum; // inner loop limit (to the nearest whole number) 
 			auto* f = new std::future<void>[threadsNum];
-			int thLoopCount = threadsNum < count? threadsNum : count;
+			int thLoopCount = threadsNum < count ? threadsNum : count; // outter loop limit max(threadNum, count)
 			for (int j = 0; j < thLoopCount; j++)
 			{
+				// check if is the last loop
 				if (j == thLoopCount - 1)
 					loopNum = count;
 				else
 					count -= loopNum;
+				
 				f[j] = thPool.push([&](int, int loopNum)
 					{
 						for (int i = 0; i < loopNum; i++)
 						{
 							NCLBoard* newBoard = new NCLBoard(size, min, max);
-							boardsMutex.lock();
+							boardsMutex.lock(); // lock cout and boards
 							boards.push_back(newBoard);
 							std::cout << "\n" << *newBoard;
 							boardsMutex.unlock();
@@ -328,6 +330,7 @@ int main()
 					}, loopNum);
 				
 			}
+			// wait all thread finish
 			for (int j = 0; j < thLoopCount; j++)
 			{
 				f[j].get();
@@ -408,7 +411,7 @@ int main()
 			cout << "How many digits for partial continuous (enter an integer N to find N-partial):" << endl;
 			InputInteger(inputNumber, 2, MAX_SIZE);
 
-			ContinuousNumber* results = new ContinuousNumber[boards.size()];
+			ContinuousNumber* results = new ContinuousNumber[boards.size()]; // stored all results from different threads
 			std::future<int>* fResult = new std::future<int>[threadsNum];
 			int numberOfboards = boards.size();
 			int loopCount = 0.5f + (float)numberOfboards / threadsNum;
@@ -422,6 +425,7 @@ int main()
 					numberOfboards -= loopCount;
 				fResult[j] = thPool.push([&](int, int loopCount, int th_index)
 					{
+						// each thread write different part of the results array
 						for (int i = 0; i < loopCount; i++)
 						{
 							results[th_index] = boards[th_index]->CheckContinuous(containSpace, inputNumber);
@@ -436,7 +440,7 @@ int main()
 			for (int j = 0; j < thLoopCount; j++)
 			{
 				int end = fResult[j].get();
-				
+				// output each part of the results array
 				while(index < end)
 				{
 					ContinuousNumber con = results[index];
