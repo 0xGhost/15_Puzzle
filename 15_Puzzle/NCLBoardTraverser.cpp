@@ -5,7 +5,10 @@
 #include <queue>
 #include <iostream>
 
+
 using std::queue;
+
+ ctpl::thread_pool NCLBoardTraverser::thPool(4);
 
 NCLBoardTraverser::NCLBoardTraverser(NCLBoard* board, const bool& containSPACE) : size(0)
 {
@@ -36,15 +39,17 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board, const bool& contain
 			totalContinuousNumber += currentBoard->CheckContinuous(containSPACE);
 		}
 
-		auto BoardMove = [&](Direction diretion)
+		auto BoardMove = [&](int, Direction diretion)
 		{
 			if (currentBoard->MoveCheck(diretion)) // check if a move is possible
 			{
 				NCLBoard* newBoard = new NCLBoard(*currentBoard);
 				newBoard->Move(diretion);
-
+				std::shared_lock<std::shared_mutex> lock1(historyMutex);
 				if (boardSet.count(newBoard->ToVector()) == 0) // check if this configuration is already searched
 				{
+					lock1.unlock();
+					std::unique_lock<std::shared_mutex> lock2(historyMutex);
 					queue.push(newBoard); // add this board into the end of pending queue
 					boardSet.insert(newBoard->ToVector()); // add this board into the searching history
 				}
@@ -54,12 +59,24 @@ ContinuousNumber NCLBoardTraverser::Travers(NCLBoard* board, const bool& contain
 				}
 			}
 		};
+#if 0
+		
+		auto tFuture = thPool.push(BoardMove, Direction::Top);
+		auto bFuture = thPool.push(BoardMove, Direction::Bottom);
+		auto lFuture = thPool.push(BoardMove, Direction::Left);
+		auto rFuture = thPool.push(BoardMove, Direction::Right);
 
-		BoardMove(Direction::Top);
-		BoardMove(Direction::Bottom);
-		BoardMove(Direction::Left);
-		BoardMove(Direction::Right);
-
+		tFuture.get();
+		bFuture.get();
+		lFuture.get();
+		rFuture.get();
+		
+#else
+		BoardMove(1, Direction::Top);
+		BoardMove(1, Direction::Bottom);
+		BoardMove(1, Direction::Left);
+		BoardMove(1, Direction::Right);
+#endif
 		delete currentBoard;
 		currentBoard = nullptr;
 		

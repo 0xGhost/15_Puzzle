@@ -3,6 +3,7 @@
 #include "NCLBoard.h"
 #include "Utility.h"
 #include "BigPosInt.h"
+#include <future>
 
 ctpl::thread_pool NCLBoard::thPool(2);
 
@@ -89,7 +90,36 @@ ContinuousNumber NCLBoard::CheckContinuous(const bool& containSPACE) const
 ContinuousNumber NCLBoard::CheckContinuous(const bool& containSPACE, const int& length) const
 {
 	ContinuousNumber result;
+#if 0
+	auto RightAndBottom = [&](int)
+	{
+		for (int j = 0; j < SIZE; j++)
+		{
+			for (int i = 0; i <= SIZE - length; i++)
+			{
+				result.row += CheckContinuousFromPoint(containSPACE, length, i, j, Direction::Right);
+				result.column += CheckContinuousFromPoint(containSPACE, length, j, i, Direction::Bottom);
+			}
+		}
+	};
+	std::future<void> rbFuture = thPool.push(RightAndBottom);
 
+	auto LeftAndTop = [&](int)
+	{
+		for (int j = 0; j < SIZE; j++)
+		{
+			for (int i = SIZE - 1; i >= length - 1; i--)
+			{
+				result.rowReverse += CheckContinuousFromPoint(containSPACE, length, i, j, Direction::Left);
+				result.columnReverse += CheckContinuousFromPoint(containSPACE, length, j, i, Direction::Top);
+			}
+		}
+	};
+	std::future<void> ltFuture = thPool.push(LeftAndTop);
+
+	rbFuture.get();
+	ltFuture.get();
+#else
 	for (int j = 0; j < SIZE; j++)
 	{
 		for (int i = 0; i <= SIZE - length; i++)
@@ -107,7 +137,7 @@ ContinuousNumber NCLBoard::CheckContinuous(const bool& containSPACE, const int& 
 			result.columnReverse += CheckContinuousFromPoint(containSPACE, length, j, i, Direction::Top);
 		}
 	}
-
+#endif
 	return result;
 }
 

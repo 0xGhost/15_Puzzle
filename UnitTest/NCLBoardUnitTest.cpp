@@ -412,7 +412,7 @@ namespace UnitTest
 
 		TEST_METHOD(TestGetTotalContinuousNumber2)
 		{
-			int load = 2;
+			int load = 5;
 			for (int i = 1; i < load; i++)
 			{
 				NCLBoard board1(3, 1, 12);

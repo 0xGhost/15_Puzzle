@@ -3,6 +3,9 @@
 #pragma once
 #include "NCLBoard.h"
 #include <unordered_set>
+#include "ctpl_stl.h"
+#include <mutex>
+#include <shared_mutex>
 
 using std::string;
 using std::unordered_set;
@@ -32,7 +35,8 @@ private:
 	int size;
 	unordered_set<vector<char>> boardSet; // the history of searching
 	ContinuousNumber totalContinuousNumber; // output result
-
+	static ctpl::thread_pool thPool;
+	mutable std::shared_mutex historyMutex;
 	ContinuousNumber Travers(NCLBoard *board, const bool& containSPACE); // search all possible move and check continuous for all vaild turn
 };
 
