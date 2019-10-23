@@ -592,5 +592,15 @@ namespace UnitTest
 			}
 			delete[] futures;
 		}
+
+		TEST_METHOD(TestGetTotalContinuousNumberLoad)
+		{
+			int load = 10000;
+			for (int i = 1; i < load; i++)
+			{
+				NCLBoard board1(3, 1, 8);
+				BigPosInt a = board1.GetTotalContinuousNumber(true);
+			}
+		}
 	};
 }

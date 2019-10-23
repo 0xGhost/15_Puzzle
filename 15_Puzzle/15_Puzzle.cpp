@@ -407,6 +407,7 @@ int main()
 			}
 			cout << "How many digits for partial continuous (enter an integer N to find N-partial):" << endl;
 			InputInteger(inputNumber, 2, MAX_SIZE);
+
 			ContinuousNumber* results = new ContinuousNumber[boards.size()];
 			std::future<int>* fResult = new std::future<int>[threadsNum];
 			int numberOfboards = boards.size();
@@ -429,7 +430,6 @@ int main()
 						return th_index;
 					}, loopCount, index);
 				index += loopCount;
-				
 			}
 
 			index = 0;
@@ -456,6 +456,7 @@ int main()
 		}
 			break;
 		case 9:
+		{
 			if (boards.size() == 0)
 			{
 				std::cout << "There is no puzzle in memory." << endl;
@@ -463,6 +464,57 @@ int main()
 			}
 			cout << "How many digits for partial continuous (enter an integer N to find N-partial):" << endl;
 			InputInteger(inputNumber, 2, MAX_SIZE);
+
+			BigPosInt* results = new BigPosInt[boards.size()];
+			std::future<int>* fResult = new std::future<int>[threadsNum];
+			int numberOfboards = boards.size();
+			int loopCount = 0.5f + (float)numberOfboards / threadsNum;
+			int index = 0;
+			int thLoopCount = threadsNum < numberOfboards ? threadsNum : numberOfboards;
+			for (int j = 0; j < thLoopCount; j++)
+			{
+				if (j == thLoopCount - 1)
+					loopCount = numberOfboards;
+				else
+					numberOfboards -= loopCount;
+				fResult[j] = thPool.push([&](int, int loopCount, int th_index)
+					{
+						for (int i = 0; i < loopCount; i++)
+						{
+							results[th_index] = boards[th_index]->GetTotalContinuousNumber(containSpace, inputNumber);
+							th_index++;
+						}
+						return th_index;
+					}, loopCount, index);
+				index += loopCount;
+
+			}
+
+			index = 0;
+			for (int j = 0; j < thLoopCount; j++)
+			{
+				int end = fResult[j].get();
+
+				while (index < end)
+				{
+					BigPosInt result = results[index];
+					cout << "\n" << *(boards[index]);
+					cout << "row = " << result << endl;
+					cout << "rowReverse = " << result << endl;
+					cout << "column = " << result << endl;
+					cout << "columnReverse = " << result << endl;
+					index++;
+				}
+			}
+
+			delete[] results;
+			delete[] fResult;
+			results = nullptr;
+			fResult = nullptr;
+
+
+
+			/*
 			for (int i = 0; i < boards.size(); i++)
 			{
 				BigPosInt result = boards[i]->GetTotalContinuousNumber(containSpace, inputNumber);
@@ -471,7 +523,8 @@ int main()
 				cout << "rowReverse = " << result << endl;
 				cout << "column = " << result << endl;
 				cout << "columnReverse = " << result << endl;
-			}
+			}*/
+		}
 			break;
 		default:
 			break;
