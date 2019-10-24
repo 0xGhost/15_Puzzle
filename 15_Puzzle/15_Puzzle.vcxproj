@@ -166,7 +166,6 @@
     <ClInclude Include="BigPosInt.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Comparable.h" />
-    <ClInclude Include="ctpl.h" />
     <ClInclude Include="ctpl_stl.h" />
     <ClInclude Include="NCLBoard.h" />
     <ClInclude Include="NCLBoardTraverser.h" />
