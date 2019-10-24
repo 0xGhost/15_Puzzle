@@ -48,6 +48,10 @@ inline void ReadPuzzleFile(vector<NCLBoard*>& boards, const string& fileName) th
 {
 	ifstream fileInput;
 	int numberOfPuzzles;
+	if (fileName.find_first_not_of("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._"/*"a-to-zA-to-Z0-to-9_."*/) != std::string::npos)
+	{
+		throw invalid_argument("File name invalid \"" + fileName + "\".");
+	}
 
 	fileInput.open(fileName.c_str());
 
@@ -182,65 +186,7 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 #endif
-#if false
-	{
-
-		int blocks4[] =
-		{ 1, 2, 3, 4,
-			5, 6, 7, 8,
-			9, 10, 11, 12 ,
-			13, 14, 15, -1 };
-
-		NCLBoard *board4 = new NCLBoard(4, blocks4);
-		cout << *board4 << endl;
-		NCLBoard boardr(4, 1, 20);
-		cout << boardr << endl;
-		//cout << board4->ToString() << endl;
-		
-		//int blocks3[] =
-		//{ 1, 2, 3, 15,
-		//205, 7, 18, 4, -1 };
-		int blocks3[] =
-		{ 1, 2, 3, 4,
-		5, 6, -1, 8, 9 };
-		NCLBoard *board3 = new NCLBoard(3, blocks3);
-		//cout << *board3 << endl;
-		//cout << board3->ToString() << endl;
-		
-		int blocks2[] =
-		{ 1, 2, 3, -1 };
-		NCLBoard *board2 = new NCLBoard(2, blocks2);
-		//cout << *board2 << endl;
-		//cout << board2->ToString() << endl;
-		
-
-		NCLBoard* board0 = board4;// = new NCLBoard(100, 1, 12000);
-		cout << *board0 << endl;
-		cout << "Continuous = " << board0->GetTotalContinuousNumber(false) << endl;
-		ContinuousNumber con = board4->CheckContinuous(true, 3);
-		cout << "row = " << con.row << endl;
-		cout << "rowReverse = " << con.rowReverse << endl;
-		cout << "column = " << con.column << endl;
-		cout << "columnReverse = " << con.columnReverse << endl; 
-		/*
-		NCLBoardTraverser traverser(board0, true);
-		//traverser.Travers(board2);
-		ContinuousNumber con = traverser.GetTotalContinuousNumber();
-		cout << "row = " << con.row << endl;
-		cout << "rowReverse = " << con.rowReverse << endl;
-		cout << "column = " << con.column << endl;
-		cout << "columnReverse = " << con.columnReverse << endl;*/
-		cout << "Continuous = " << board0->GetTotalContinuousNumber(true) << endl;
-		
-
-		delete board4;
-		delete board3;
-		delete board2;
-		//delete board0;
-	}
-	_CrtDumpMemoryLeaks();
-	return 0;
-#endif	
+	
 	const int threadsNum = std::thread::hardware_concurrency();
 	ctpl::thread_pool thPool(threadsNum);
 	std::mutex boardsMutex;
@@ -359,16 +305,22 @@ int main()
 		case 4:
 			try
 			{
-				ReadPuzzleFile(boards, puzzleFileName);
+				string readFilename;
+				cout << "Please input your file name(for default file name input 0):";
+				cin >> readFilename;
+				if (readFilename == "0")
+					readFilename = puzzleFileName;
+				ReadPuzzleFile(boards, readFilename);
+				for (int i = 0; i < boards.size(); i++)
+				{
+					std::cout << "\n" << *boards[i];
+				}
 			}
 			catch (const invalid_argument& iae)
 			{
 				std::cout << "Unable to read data : " << iae.what() << endl;
 			}
-			for (int i = 0; i < boards.size(); i++)
-			{
-				std::cout << "\n" << *boards[i];
-			}
+			
 			break;
 		case 5:
 			if (boards.size() == 0)
@@ -515,19 +467,6 @@ int main()
 			delete[] fResult;
 			results = nullptr;
 			fResult = nullptr;
-
-
-
-			/*
-			for (int i = 0; i < boards.size(); i++)
-			{
-				BigPosInt result = boards[i]->GetTotalContinuousNumber(containSpace, inputNumber);
-				cout << "\n" << *boards[i];
-				cout << "row = " << result << endl;
-				cout << "rowReverse = " << result << endl;
-				cout << "column = " << result << endl;
-				cout << "columnReverse = " << result << endl;
-			}*/
 		}
 			break;
 		default:

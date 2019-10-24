@@ -17,8 +17,8 @@ namespace std {
 		size_t operator()(const vector<char>& v) const {
 			std::hash<int> hasher;
 			size_t seed = 0;
-			for (int i : v) {
-				seed ^= hasher(i) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+			for (int i : v) { 
+				seed ^= hasher(i) + 0x9e3779b9 + (seed << 6) + (seed >> 2); // hash function
 			}
 			return seed;
 		}
