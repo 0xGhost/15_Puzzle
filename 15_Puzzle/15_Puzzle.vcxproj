@@ -168,7 +168,6 @@
     <ClInclude Include="ctpl_stl.h" />
     <ClInclude Include="NCLBoard.h" />
     <ClInclude Include="NCLBoardTraverser.h" />
-    <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>

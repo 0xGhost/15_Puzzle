@@ -21,14 +21,6 @@ namespace UnitTest
 	TEST_CLASS(NCLBoardUnitTest)
 	{
 	public:
-		/*
-		TEST_METHOD(TestMethod1)
-		{
-			std::istringstream iss("2 \n");
-			cin.rdbuf(iss.rdbuf());
-
-		}
-		*/
 		
 		TEST_CLASS_INITIALIZE(RandomSeed)
 		{

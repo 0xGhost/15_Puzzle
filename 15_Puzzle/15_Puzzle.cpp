@@ -117,6 +117,7 @@ inline void WriteSolutionFile(const vector<NCLBoard*>& boards, const bool& conta
 		fileOutput << "column = " << result << endl;
 		fileOutput << "reverse row = " << result << endl;
 		fileOutput << "reverse column = " << result << endl;
+		// partial continuous
 		fileOutput << "(total for row & column, including reverse, in this configuration)" << endl;
 		for (int i = 2; i <= size; i++)
 		{
@@ -145,8 +146,8 @@ inline void InputInteger(int& input, const int& min, const int& max)
 		if (!cin.fail() && inputNumber >= min && inputNumber <= max)
 			break;
 		std::cout << "Please enter a valid integer in Range (" << min << ", " << max << "): ";
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin.clear(); // clear the cin flag bit
+		cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear cin stream
 	} while (1);
 
 	input = inputNumber;
