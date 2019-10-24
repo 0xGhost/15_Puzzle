@@ -18,8 +18,8 @@ class Board :
 public:
 	const int SIZE; // size of the board eg: SIZE = 4 means 15-puzzle
 
-	Board(const int& size, const int& min, const int& max); // random generate a puzzle board
-	Board(const int& size, int* input); // input a board using an array
+	Board(const int& size, const int& min, const int& max); // random generate a puzzle board, make sure argument is vaild
+	Board(const int& size, int* input); // input a board using an array, make sure the input array is in correct format
 	Board(const Board& board); // copy constructor
 	virtual ~Board();
 	bool MoveCheck(const Direction& direction) const; // check if a move is possible

@@ -160,7 +160,6 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="NCLBoard.cpp" />
     <ClCompile Include="NCLBoardTraverser.cpp" />
-    <ClCompile Include="ThreadPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BigPosInt.h" />

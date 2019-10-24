@@ -37,9 +37,9 @@ class NCLBoard :
 	public Board
 {
 public:
-	NCLBoard(const int& size, const int& min, const int& max) :Board(size, min, max) {}
-	NCLBoard(const int& size, int* input) : Board(size, input){	}
-	NCLBoard(const NCLBoard& rhs) : Board(rhs) {}
+	NCLBoard(const int& size, const int& min, const int& max) :Board(size, min, max) {} // random generate a puzzle board, make sure argument is vaild
+	NCLBoard(const int& size, int* input) : Board(size, input){	}// input a board using an array, make sure the input array is in correct format
+	NCLBoard(const NCLBoard& rhs) : Board(rhs) {} // copy constructor
 	virtual ~NCLBoard() {};
 	bool IsTurnEnd(); // check if this board is a turn end 
 	BigPosInt GetTotalContinuousNumber(const bool& containSpace, const int& partial) const; // return continuous number (all are the same)

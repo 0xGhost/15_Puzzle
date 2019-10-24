@@ -16,6 +16,7 @@
 *
 *********************************************************/
 
+// modified by Yiang Lu in 24/Oct/2019
 
 #ifndef __ctpl_stl_thread_pool_H__
 #define __ctpl_stl_thread_pool_H__
@@ -110,7 +111,7 @@ namespace ctpl {
                     {
                         // stop the detached threads that were waiting
                         std::unique_lock<std::mutex> lock(this->mutex);
-                        this->cv.notify_all();
+                        this->condition.notify_all();
                     }
                     this->threads.resize(nThreads);  // safe to delete because the threads are detached
                     this->flags.resize(nThreads);  // safe to delete because the threads have copies of shared_ptr of the flags, not originals
@@ -156,7 +157,7 @@ namespace ctpl {
             }
             {
                 std::unique_lock<std::mutex> lock(this->mutex);
-                this->cv.notify_all();  // stop all waiting threads
+                this->condition.notify_all();  // stop all waiting threads
             }
             for (int i = 0; i < static_cast<int>(this->threads.size()); ++i) {  // wait for the computing threads to finish
                     if (this->threads[i]->joinable())
@@ -179,7 +180,7 @@ namespace ctpl {
             });
             this->q.push(_f);
             std::unique_lock<std::mutex> lock(this->mutex);
-            this->cv.notify_one();
+            this->condition.notify_one();
             return pck->get_future();
         }
 
@@ -193,18 +194,12 @@ namespace ctpl {
             });
             this->q.push(_f);
             std::unique_lock<std::mutex> lock(this->mutex);
-            this->cv.notify_one();
+            this->condition.notify_one();
             return pck->get_future();
         }
 
 
     private:
-
-        // deleted
-        thread_pool(const thread_pool &);// = delete;
-        thread_pool(thread_pool &&);// = delete;
-        thread_pool & operator=(const thread_pool &);// = delete;
-        thread_pool & operator=(thread_pool &&);// = delete;
 
         void set_thread(int i) {
             std::shared_ptr<std::atomic<bool>> flag(this->flags[i]); // a copy of the shared ptr to the flag
@@ -224,7 +219,7 @@ namespace ctpl {
                     // the queue is empty here, wait for the next command
                     std::unique_lock<std::mutex> lock(this->mutex);
                     ++this->nWaiting;
-                    this->cv.wait(lock, [this, &_f, &isPop, &_flag](){ isPop = this->q.pop(_f); return isPop || this->isDone || _flag; });
+                    this->condition.wait(lock, [this, &_f, &isPop, &_flag](){ isPop = this->q.pop(_f); return isPop || this->isDone || _flag; });
                     --this->nWaiting;
                     if (!isPop)
                         return;  // if the queue is empty and this->isDone == true or *flag then return
@@ -243,7 +238,7 @@ namespace ctpl {
         std::atomic<int> nWaiting;  // how many threads are waiting
 
         std::mutex mutex;
-        std::condition_variable cv;
+        std::condition_variable condition;
     };
 
 }
